@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E4D2F1"
+    tools:context=".GambleWin">
+
+   <TextView
+       android:id="@+id/headline"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
+       android:layout_centerInParent="true"
+       android:layout_marginTop="40dp"
+       android:text="@string/gamble_headline"
+       android:textSize="30sp" />
+
+   <TextView
+       android:id="@+id/game_str"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="130dp"
+       android:text="team1 vs team2"
+       android:textSize="25sp" />
+
+
+   <EditText
+       android:id="@+id/score_home_team_bet"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:layout_marginLeft="80dp"
+       android:layout_marginTop="200dp"
+       android:hint="Home team"
+       android:inputType="numberDecimal"
+       android:textSize="20sp" />
+
+   <EditText
+       android:id="@+id/score_away_team_bet"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:layout_marginLeft="240dp"
+       android:layout_marginTop="200dp"
+       android:hint="Away team"
+       android:inputType="numberDecimal"
+       android:textSize="20sp" />
+
+   <Button
+       android:id="@+id/scored_for_home_team"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="27dp"
+       android:layout_marginTop="300dp"
+       android:onClick="homeTeamPlayers"
+       android:text="scored for home team"
+       android:textSize="12sp" />
+
+   <Button
+       android:id="@+id/scored_for_away_team"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="220dp"
+       android:layout_marginTop="300dp"
+       android:onClick="awayTeamPlayers"
+       android:text="scored for away team"
+       android:textSize="12sp" />
+
+   <TextView
+       android:id="@+id/yellow_cards"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="40dp"
+       android:layout_marginTop="430dp"
+       android:text="Number of yellow cards:"
+       android:textSize="20sp" />
+
+   <EditText
+       android:id="@+id/yellow_cards_bet"
+       android:layout_width="70dp"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="270dp"
+       android:layout_marginTop="420dp"
+       android:gravity="center"
+       android:hint="yellow"
+       android:inputType="numberDecimal"
+       android:textSize="20sp" />
+
+   <TextView
+       android:id="@+id/red_cards"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="55dp"
+       android:layout_marginTop="520dp"
+       android:text="Number of red cards:"
+       android:textSize="20sp" />
+
+   <EditText
+       android:id="@+id/red_cards_bet"
+       android:layout_width="70dp"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="260dp"
+       android:layout_marginTop="510dp"
+       android:gravity="center"
+       android:hint="red"
+       android:inputType="numberDecimal"
+       android:textSize="20sp" />
+
+   <Button
+       android:id="@+id/previous_game"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentBottom="true"
+       android:onClick="previousGame"
+       android:text="previous game"
+       android:textSize="12sp" />
+
+   <Button
+       android:id="@+id/next_game"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentBottom="true"
+       android:onClick="nextGame"
+       android:text="next game"
+       android:textSize="12sp" />
+
+</RelativeLayout>

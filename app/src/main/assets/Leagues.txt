@@ -1,0 +1,24 @@
+English Premier League:4328
+English League Championship:4329
+FA Cup:4482
+EFL Cup:4570
+Spanish La Liga:4335
+Copa Del Rey:4483
+Supercopa de Espana:4511
+French Liga 1:4334
+Coupe De La Ligue:4504
+Coupe De France:4484
+Italian Serie A:4332
+Supercoppa Italiana:4507
+Coppa Italia:4506
+German Bundesliga:4331
+DFB-Pokal:4485
+FIFA World Cup:4429
+FIFA Club World Cup:4503
+UEFA Champions League:4480
+UEFA Europa League:4481
+UEFA Nations League:4490
+UEFA Super Cup:4512
+UEFA European Under-21 Championship:4566
+UEFA European Football championship:4502
+International Championship Cup:4505

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyLeagues">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/my_leagues"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/createLeague"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="3"
+                android:onClick="createLeague"
+                android:text="@string/create_league" />
+            <Button
+                android:id="@+id/joinLeague"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="3"
+                android:onClick="joinLeague"
+                android:text="@string/join_league" />
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/my_leagues_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

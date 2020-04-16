@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E3B2B2"
+    tools:context=".popupPlayersList">
+
+    <TextView
+        android:id="@+id/headline"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="choose players you think they might score" />
+
+    <CheckBox
+        android:id="@+id/checkbox1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="100dp"
+        android:onClick="checkFunc"
+        android:text="eden"
+        android:textSize="30sp" />
+
+    <CheckBox
+        android:id="@+id/checkbox2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="140dp"
+        android:onClick="checkFunc"
+        android:text="dekel" />
+
+    <CheckBox
+        android:id="@+id/checkbox3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="180dp"
+        android:onClick="checkFunc"
+        android:text="sara" />
+
+    <CheckBox
+        android:id="@+id/checkbox4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="220dp"
+        android:onClick="checkFunc"
+        android:text="sagy" />
+
+    <CheckBox
+        android:id="@+id/checkbox5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="400dp"
+        android:onClick="checkFunc"
+        android:text="sagy" />
+
+
+</RelativeLayout>
