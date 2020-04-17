@@ -27,7 +27,7 @@ public class GamesAdapter extends BaseAdapter{
     private ArrayList<Button> m_itemsArr;
     private HashMap<Integer, Boolean> checkedMap;
     private JSONArray m_events;
-    private int m_counter = 0;
+    private int MAX_GAMES_TO_CHOOSE = 3;
     private final GamesList m_gamesListJSON;
     public GamesAdapter(Context c, ArrayList<Button> items, JSONArray events, GamesList gamesList ){
         this.m_context = c;
@@ -96,16 +96,16 @@ public class GamesAdapter extends BaseAdapter{
         boolean checked = event.isChecked();
         if(checked){
             this.checkedMap.put((Integer) event.getTag(), true);
-            if(CreateGroup.getCounter() >= 2){
+            if(CreateGroup.getCounter() > MAX_GAMES_TO_CHOOSE){
                 event.setChecked(false);
                 this.checkedMap.put((Integer) event.getTag(), false);
-                toast = Toast.makeText(m_context, "Can't more than 10", Toast.LENGTH_SHORT);
+                toast = Toast.makeText(m_context, "Can't select more than "+MAX_GAMES_TO_CHOOSE, Toast.LENGTH_SHORT);
             } else {
                 CreateGroup.increaseCounter();
                 toast = Toast.makeText(m_context, event.getText()+" selected", Toast.LENGTH_SHORT);
             }
         } else {
-            this.checkedMap.put(event.getId(), false);
+            this.checkedMap.put((Integer) event.getTag(), false);
             CreateGroup.decreaseCounter();
             toast = Toast.makeText(m_context, event.getText()+" removed", Toast.LENGTH_SHORT);
         }

@@ -18,7 +18,7 @@ import java.util.Objects;
 public class CreateGroup extends AppCompatActivity {
     final static HashMap<String, String> btnMap = new HashMap<>();
     Intent m_intent;
-    static int count_games = 0;
+    static int count_games = 1;
     static HashMap<String, Boolean[]> chosenGames = new HashMap<>();
 
     @Override
