@@ -10,11 +10,17 @@ import android.widget.LinearLayout;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class CreateGroup extends AppCompatActivity {
     final static HashMap<String, String> btnMap = new HashMap<>();
+    Intent m_intent;
+    static int count_games = 0;
+    static HashMap<String, Boolean[]> chosenGames = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +68,20 @@ public class CreateGroup extends AppCompatActivity {
             }
         }
     }
+    public static void increaseCounter(){
+        CreateGroup.count_games++;
+    }
+    public static void decreaseCounter(){
+        CreateGroup.count_games--;
+    }
+    public static int getCounter() {
+        return count_games;
+    }
     public void openLeaguesGame(HashMap<String, String> btnMap, Button btnShow){
-        Intent intent = new Intent(this, ChooseLeagueGames.class);
-        intent.putExtra("leagueID", String.valueOf(btnShow.getId()));
-        startActivity(intent);
+        if(m_intent == null) {
+            m_intent = new Intent(this, ChooseLeagueGames.class);
+        }
+        m_intent.putExtra("leagueID", String.valueOf(btnShow.getId()));
+        startActivity(m_intent);
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.example.betapp.CreateGroup;
 import com.example.betapp.GambleWin;
 import com.example.betapp.GamesList;
 import com.example.betapp.JoinGroup;
@@ -36,7 +37,7 @@ public class GamesAdapter extends BaseAdapter{
         int checkbox_amount = m_itemsArr.size()-1;
         this.checkedMap = new HashMap<>(checkbox_amount);
         for(int i = 0; i< checkbox_amount; i++){
-            checkedMap.put(/*m_game.get(i).getId()*/i, false);
+            checkedMap.put(i, ((CheckBox)items.get(i)).isChecked());
         }
     }
     @Override
@@ -95,44 +96,17 @@ public class GamesAdapter extends BaseAdapter{
         boolean checked = event.isChecked();
         if(checked){
             this.checkedMap.put((Integer) event.getTag(), true);
-           /* LinkedHashMap<String, String> details = new LinkedHashMap<>(8);
-            try{
-                details.put("idEvent",
-                        m_events.getJSONObject(event.getId()).getString("idEvent"));
-                details.put("strEvent",
-                        m_events.getJSONObject(event.getId()).getString("strEvent"));
-                details.put("idLeague",
-                        m_events.getJSONObject(event.getId()).getString("idLeague"));
-                details.put("strLeague",
-                        m_events.getJSONObject(event.getId()).getString("strLeague"));
-                details.put("strHomeTeam",
-                        m_events.getJSONObject(event.getId()).getString("strHomeTeam"));
-                details.put("strAwayTeam",
-                        m_events.getJSONObject(event.getId()).getString("strAwayTeam"));
-                details.put("dateEvent",
-                        m_events.getJSONObject(event.getId()).getString("dateEvent"));
-                details.put("strTimeLocal",
-                        m_events.getJSONObject(event.getId()).getString("strTimeLocal"));
-                boolean added = m_gamesList.addGame(String.valueOf(event.getId()), details);
-                if (!added){
-                    System.out.println("didn't add games chosen");
-                    //Toast.makeText(this, "added succesfuly"); //TODO: notification
-                }
-            } catch (Exception e){
-                System.out.println(this.toString()+" line 111");
-            }*/
-            if(m_counter >= 2){
+            if(CreateGroup.getCounter() >= 2){
                 event.setChecked(false);
                 this.checkedMap.put((Integer) event.getTag(), false);
                 toast = Toast.makeText(m_context, "Can't more than 10", Toast.LENGTH_SHORT);
             } else {
-                m_counter++;
+                CreateGroup.increaseCounter();
                 toast = Toast.makeText(m_context, event.getText()+" selected", Toast.LENGTH_SHORT);
             }
         } else {
             this.checkedMap.put(event.getId(), false);
-            m_counter--;
-//            event.setChecked(false);
+            CreateGroup.decreaseCounter();
             toast = Toast.makeText(m_context, event.getText()+" removed", Toast.LENGTH_SHORT);
         }
         toast.setGravity(Gravity.BOTTOM, 0, 0);
