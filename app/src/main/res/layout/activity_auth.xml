@@ -48,7 +48,7 @@
         android:onClick="signUp"
         android:text="Sign Up"
         app:layout_constraintEnd_toEndOf="@+id/password"
-        tools:layout_editor_absoluteY="251dp" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/signIn"
@@ -57,6 +57,6 @@
         android:onClick="signIn"
         android:text="Sign In"
         app:layout_constraintStart_toStartOf="@+id/password"
-        tools:layout_editor_absoluteY="251dp" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
