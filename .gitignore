@@ -13,6 +13,7 @@
 /captures
 .externalNativeBuild
 .cxx
+build/
 
 # added on vs code
 .settings
