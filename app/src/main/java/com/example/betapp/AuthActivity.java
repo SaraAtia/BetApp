@@ -108,36 +108,13 @@ public class AuthActivity extends AppCompatActivity {
         String email_address = email_address_field.getText().toString();
         String password = password_field.getText().toString();
 
-        int result = 0;
-        try {
-            result = authService.signInOrSignUp(email_address, password, AuthService.SIGN_UP);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (result == 1) {
-            popupMessage("Signed up successfully");
-
-        } else {
-            popupMessage("Could not sign up");
-        }
+        createAccount(email_address,password);
 
     }
 
     public void openMyLeaguesActivity() {
         Intent intent = new Intent(this, MyLeagues.class);
         startActivity(intent);
-    }
-
-    private void hideKeyboard(View view){
-            InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            //Find the currently focused view, so we can grab the correct window token from it.
-            view = this.getCurrentFocus();
-            //If no view currently has focus, create a new one, just so we can grab a window token from it
-            if (view == null) {
-                view = new View(this);
-            }
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void popupMessage(String text){
@@ -170,8 +147,22 @@ public class AuthActivity extends AppCompatActivity {
                         } else {
                             popupMessage("Credentials incorrect");
                         }
+                    }
+                });
+    }
 
-                        // ...
+    private void createAccount(String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            openMyLeaguesActivity();
+                        } else {
+                            popupMessage("Can't create account");
+                        }
                     }
                 });
     }
