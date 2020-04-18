@@ -13,7 +13,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.example.betapp.Services.AuthService.AuthService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 import android.view.inputmethod.InputMethodManager;
 
 public class AuthActivity extends AppCompatActivity {
-    AuthService authService;
     CheckBox rememberMe;
     private FirebaseAuth mAuth;
 
@@ -34,41 +32,16 @@ public class AuthActivity extends AppCompatActivity {
         rememberMe = findViewById(R.id.rememberMe);
         mAuth = FirebaseAuth.getInstance();
 //        this.startService(); // TODO: uncomment to start notification service
-
-        // check if 'remember me' checkbox was checks
-        SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
-        String checkbox = prefs.getString("remember","");
-        if (checkbox.equals("true")){
-            openMyLeaguesActivity();
-        }
-
-        // when checkbox is checked
-        rememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isChecked()){
-                    SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("remember","true");
-                    editor.apply();
-                } else if (!buttonView.isChecked()){
-                    SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("remember","false");
-                    editor.apply();
-                }
-            }
-        });
     }
 
     @Override
     public void onStart(){
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null){
-//        openMyLeaguesActivity();
-//        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null){
+        openMyLeaguesActivity();
+        }
     }
 
     @Override
@@ -78,16 +51,6 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void signIn(View view){
-        //TODO: delete
-        //########################################################
-        try {
-            authService.signInOrSignUp("sara@betapp.com",
-                    "sara1234", AuthService.SIGN_IN);
-            openMyLeaguesActivity();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //###############################################################
         // get fields
         EditText email_address_field = findViewById(R.id.email_address);
         EditText password_field = findViewById(R.id.password);

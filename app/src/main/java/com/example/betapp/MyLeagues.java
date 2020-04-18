@@ -15,13 +15,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class MyLeagues extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_my_leagues);
         LinearLayout l = findViewById(R.id.my_leagues_layout);
         ArrayList<String> btnStr = new ArrayList<>();
@@ -60,17 +65,10 @@ public class MyLeagues extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logout(){
-        SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("remember","false");
-        editor.apply();
-        finish();
+    public void signOut(View view){
+        mAuth.signOut();
+        startActivity(new Intent(this, AuthActivity.class));
     }
 
-    @Override
-    public void onBackPressed() {
-        logout();
-    }
 
 }
