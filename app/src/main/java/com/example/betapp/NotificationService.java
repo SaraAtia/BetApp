@@ -22,19 +22,19 @@ public class NotificationService extends IntentService {
 
     public NotificationService( )
     {
-        super( "ExampleService" );
+        super( "NotificationService" );
     }
 
 
 
     public NotificationService(String name )
     {
-        super( "ExampleService" );
+        super( "NotificationService" );
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        for (int i=0;i<10;i++){
+        while(true){
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {

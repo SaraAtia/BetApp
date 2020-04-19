@@ -53,6 +53,7 @@ public class MyLeagues extends AppCompatActivity {
             l.addView(btnShow);
         }
 
+                this.startService(); // TODO: uncomment to start notification service
 
     }
 
@@ -70,5 +71,14 @@ public class MyLeagues extends AppCompatActivity {
         startActivity(new Intent(this, AuthActivity.class));
     }
 
+    public void startService(){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+    }
+
+    public void stopService(View v){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        stopService(serviceIntent);
+    }
 
 }

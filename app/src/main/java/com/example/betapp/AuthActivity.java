@@ -30,7 +30,6 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         mAuth = FirebaseAuth.getInstance();
-//        this.startService(); // TODO: uncomment to start notification service
     }
 
     @Override
@@ -87,15 +86,7 @@ public class AuthActivity extends AppCompatActivity {
         toast.show();
     }
 
-    public void startService(){
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
-    }
 
-    public void stopService(View v){
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        stopService(serviceIntent);
-    }
 
     private void signIn(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
