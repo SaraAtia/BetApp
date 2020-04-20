@@ -1,4 +1,4 @@
-package com.example.betapp;
+package com.example.betapp.Services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -10,6 +10,8 @@ import android.os.Build;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.betapp.AuthActivity;
+import com.example.betapp.R;
 import com.example.betapp.Services.SoccerGame;
 
 
@@ -25,6 +27,8 @@ public class NotificationService extends IntentService {
         super( "NotificationService" );
         this.games = new ArrayList<>();
         this.games.add(new SoccerGame("beitar-hapoel",1,0,
+                null,0,0,false));
+        this.games.add(new SoccerGame("maccabi-haifa",2,1,
                 null,0,0,false));
     }
 
