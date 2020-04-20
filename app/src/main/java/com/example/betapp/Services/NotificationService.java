@@ -21,6 +21,7 @@ import static com.example.betapp.App.CHANNEL_ID;
 
 public class NotificationService extends IntentService {
     ArrayList<SoccerGame> games;
+    int id;
 
     public NotificationService()
     {
@@ -30,6 +31,7 @@ public class NotificationService extends IntentService {
                 null,0,0,false));
         this.games.add(new SoccerGame("maccabi-haifa",2,1,
                 null,0,0,false));
+        this.id = 1;
     }
 
     public NotificationService(String name)
@@ -61,7 +63,7 @@ public class NotificationService extends IntentService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.notify(1,notification);
+            manager.notify(id++,notification);
         }
     }
 
