@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".NotificationService"/>
+        <service android:name=".Services.NotificationService"/>
     </application>
 
 </manifest>

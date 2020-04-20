@@ -13,6 +13,7 @@
 /captures
 .externalNativeBuild
 .cxx
+build/
 
 # added on vs code
 .settings
@@ -23,5 +24,4 @@ app/src/main/java/com/example/betapp/Services/AuthService/webApiKey.txt
 /app/src/Leagues.txt
 /.idea/.name
 /app/src/main/java/com/example/betapp/Consts.java
-/app/build/
 /app/google-services.json
