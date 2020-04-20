@@ -48,7 +48,7 @@ public class MyLeagues extends AppCompatActivity {
             l.addView(btnShow);
         }
 
-                this.startService(); // TODO: uncomment to start notification service
+//                this.startService(); // TODO: uncomment to start notification service
 
     }
 
