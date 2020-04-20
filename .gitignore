@@ -24,3 +24,4 @@ app/src/main/java/com/example/betapp/Services/AuthService/webApiKey.txt
 /.idea/.name
 /app/src/main/java/com/example/betapp/Consts.java
 /app/build/
+/app/google-services.json
