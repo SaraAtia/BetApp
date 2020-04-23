@@ -5,7 +5,7 @@ import java.util.List;
 
 public class UserBets {
     private LinkedList<Bet> userGuesses;
-    private int userScore;
+    private float userScore;
     private String id;
 
      public UserBets(String id){
@@ -35,7 +35,7 @@ public class UserBets {
      }
 
 
-    public int getUserScore(){
+    public float getUserScore(){
          return this.userScore;
     }
 

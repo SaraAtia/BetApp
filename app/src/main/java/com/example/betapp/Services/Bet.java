@@ -53,6 +53,16 @@ public class Bet {
         return whoScored;
     }
 
+    public String scoringPlayersToString(){
+        String scoring="";
+        int i;
+        for (i = 0; i < this.whoScored.size() - 1; i++){
+            scoring += this.whoScored.get(i) + ", ";
+        }
+        scoring += this.whoScored.get(i);
+        return scoring;
+    }
+
 
     public String getMatch() {
         return match;
@@ -61,4 +71,5 @@ public class Bet {
     public int getWinningTeam(){
         return this.winningTeam;
     }
+
 }
