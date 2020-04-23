@@ -3,25 +3,25 @@ package com.example.betapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.betapp.Services.NotificationService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class MyLeagues extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_my_leagues);
         LinearLayout l = findViewById(R.id.my_leagues_layout);
         ArrayList<String> btnStr = new ArrayList<>();
@@ -48,6 +48,7 @@ public class MyLeagues extends AppCompatActivity {
             l.addView(btnShow);
         }
 
+//                this.startService(); // TODO: uncomment to start notification service
 
     }
 
@@ -60,17 +61,19 @@ public class MyLeagues extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logout(){
-        SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("remember","false");
-        editor.apply();
-        finish();
+    public void signOut(View view){
+        mAuth.signOut();
+        startActivity(new Intent(this, AuthActivity.class));
     }
 
-    @Override
-    public void onBackPressed() {
-        logout();
+    public void startService(){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+    }
+
+    public void stopService(View v){
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        stopService(serviceIntent);
     }
 
 }
