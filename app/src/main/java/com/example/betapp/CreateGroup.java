@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.betapp.Services.Group;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 public class CreateGroup extends AppCompatActivity {
@@ -20,17 +20,19 @@ public class CreateGroup extends AppCompatActivity {
     Intent m_intent;
     static int count_games = 1;
     static HashMap<String, Boolean[]> chosenGames = new HashMap<>();
+    static Group m_my_group = Group.createGroupOnDB(); //TODO: don't create new group every entry to activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
-        addLeaguesBtns();
+        addGroupsBtns();
     }
-    public void addLeaguesBtns(){
+    public void addGroupsBtns(){
         LinearLayout l = findViewById(R.id.choose_leagues_layout);
         BufferedReader buffer = null;
         try {
+            // read from const file the leagues names and create btn for each league
             buffer = new BufferedReader(new InputStreamReader
                     (getAssets().open(Consts.LEAGUES_FILE_NAME)));
             String line = buffer.readLine();
@@ -52,7 +54,7 @@ public class CreateGroup extends AppCompatActivity {
                 btnShow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openLeaguesGame(btnMap, btnShow);
+                        openLeagueGames(btnMap, btnShow);
                     }
                 });
                 l.addView(btnShow);
@@ -77,7 +79,10 @@ public class CreateGroup extends AppCompatActivity {
     public static int getCounter() {
         return count_games;
     }
-    public void openLeaguesGame(HashMap<String, String> btnMap, Button btnShow){
+    public static Group getGroup() {
+        return m_my_group;
+    }
+    public void openLeagueGames(HashMap<String, String> btnMap, Button btnShow){
         if(m_intent == null) {
             m_intent = new Intent(this, ChooseLeagueGames.class);
         }

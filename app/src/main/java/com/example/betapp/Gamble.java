@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutionException;
 
-public class GambleWin extends AppCompatActivity {
+public class Gamble extends AppCompatActivity {
 
     ArrayList<String> playersFromPopupWindow = popupPlayersList.players;
 
@@ -47,7 +47,7 @@ public class GambleWin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gamble_win);
+        setContentView(R.layout.activity_gamble);
 
         gameString = (TextView)findViewById(R.id.game_str);
         nextButton = (Button)findViewById(R.id.next_game);
@@ -111,7 +111,7 @@ public class GambleWin extends AppCompatActivity {
 //        }catch (Exception e){
 //            System.out.println("GambleWin line 108"); //TODO: change exception
 //        }
-        startActivity(new Intent(GambleWin.this, popupPlayersList.class));
+        startActivity(new Intent(Gamble.this, popupPlayersList.class));
     }
 
     public void awayTeamPlayers(View view){
@@ -120,7 +120,7 @@ public class GambleWin extends AppCompatActivity {
 //        }catch (Exception e){
 //            System.out.println("GambleWin line 108"); //TODO: change exception
 //        }
-        startActivity(new Intent(GambleWin.this, popupPlayersList.class));
+        startActivity(new Intent(Gamble.this, popupPlayersList.class));
     }
 
     public void nextGame(View view){

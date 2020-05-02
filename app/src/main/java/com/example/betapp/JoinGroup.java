@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.example.betapp.Services.Group;
+import com.example.betapp.Services.User;
 
 public class JoinGroup extends AppCompatActivity {
 
@@ -18,11 +19,13 @@ public class JoinGroup extends AppCompatActivity {
     }
     public void enterCode(View view) {
         EditText text_code = (EditText) findViewById(R.id.code);
-        String code = text_code.getText().toString();
-        System.out.println(code);
-        Intent intent = new Intent(this, GambleWin.class);
+        String code = text_code.getText().toString(); // code = groupID
+        Group group = Group.getGroup(code);
+        User user = AuthActivity.mUser;
+        user.addGroup(group);
+        group.addUser(user.getUserID());
+        Intent intent = new Intent(this, Gamble.class);
         intent.putExtra("groupId", code);
         startActivity(intent);
-        //Todo: use code to sign into group
     }
 }

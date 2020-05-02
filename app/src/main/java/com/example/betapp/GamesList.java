@@ -32,7 +32,6 @@ public class GamesList {
     }
 
     public JSONObject getGames() {
-//        return games;
         return eventsInfo;
     }
 
@@ -57,6 +56,6 @@ public class GamesList {
 
     public void uploadToDB() {
         //TODO: generate group's code and add it to json
-        HttpService.getInstance().postJSON(GROUPS_DATABASE, this.eventsInfo);
+        //HttpService.getInstance().postJSON(GROUPS_DATABASE, this.eventsInfo);
     }
 }

@@ -42,7 +42,7 @@ public class HttpService {
 
             } catch (NullPointerException | IOException e) {
                 e.printStackTrace();
-                System.out.println(this.toString()+ " line 101");
+                System.out.println(this.toString()+ " line 45");
             }
         }
         return new JSONObject(responseStr);
@@ -56,7 +56,7 @@ public class HttpService {
             }
         } catch (ExecutionException | InterruptedException e){
             e.printStackTrace();//todo: handle
-            System.out.println(this.toString()+" line 53");
+            System.out.println(this.toString()+" line 59");
         }
     }
     public void deleteDB(String url) {
@@ -68,7 +68,7 @@ public class HttpService {
             }
         } catch (ExecutionException | InterruptedException e){
             e.printStackTrace();//todo: handle
-            System.out.println(this.toString()+" line 53");
+            System.out.println(this.toString()+" line 71");
         }
 
     }

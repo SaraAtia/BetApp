@@ -12,16 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RankingTable">
-        </activity>
+        <activity android:name=".NameGroup"/>
+        <activity android:name=".RankingTable"
+            android:label="My Activity"
+            android:screenOrientation="fullSensor"></activity>
         <activity
             android:name=".popupPlayersList"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity android:name=".GambleWin" />
+        <activity android:name=".Gamble" />
         <activity android:name=".ChooseLeagueGames" />
         <activity android:name=".CreateGroup" />
         <activity android:name=".JoinGroup" />
-        <activity android:name=".MyLeagues" />
+        <activity android:name=".MyGroups" />
         <activity android:name=".AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +32,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.NotificationService"/>
+        <service android:name=".Services.NotificationService" />
     </application>
 
 </manifest>

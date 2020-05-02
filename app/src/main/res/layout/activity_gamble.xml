@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E4D2F1"
-    tools:context=".GambleWin">
+    tools:context=".Gamble">
 
    <TextView
        android:id="@+id/headline"
