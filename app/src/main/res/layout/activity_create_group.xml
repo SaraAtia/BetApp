@@ -25,7 +25,7 @@
                 android:id="@+id/chooseLeagues"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_games"
+                android:text="@string/choose_league"
                 android:gravity="start"
                 android:textAlignment="viewStart"
                 android:textSize="30sp"

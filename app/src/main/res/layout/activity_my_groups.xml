@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/my_leagues"
+            android:text="@string/my_groups"
             android:textSize="30sp" />
 
         <LinearLayout
@@ -34,16 +34,16 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_weight="3"
-                android:onClick="createLeague"
-                android:text="@string/create_league" />
+                android:onClick="createGroup"
+                android:text="@string/create_group" />
             <Button
                 android:id="@+id/joinLeague"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_weight="3"
-                android:onClick="joinLeague"
-                android:text="@string/join_league" />
+                android:onClick="joinGroup"
+                android:text="@string/join_group" />
         </LinearLayout>
 
         <ScrollView
@@ -51,7 +51,7 @@
             android:layout_height="548dp">
 
             <LinearLayout
-                android:id="@+id/my_leagues_layout"
+                android:id="@+id/my_groups_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"></LinearLayout>
