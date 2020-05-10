@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Bet App</string>
-    <string name="my_leagues">My Leagues</string>
-    <string name="create_league">Create Leagues</string>
-    <string name="choose_games">Choose Games To Bet</string>
-    <string name="join_league">Join League</string>
+    <string name="my_groups">My Groups</string>
+    <string name="create_group">Create Group</string>
+    <string name="choose_league">Choose League To Bet</string>
+    <string name="join_group">Join Group</string>
     <string name="example">Example TRY TRY!</string>
     <string name="submit">Submit</string>
     <string name="gamble_headline">Time to bet!</string>
