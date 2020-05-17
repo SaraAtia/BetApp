@@ -32,9 +32,8 @@ public class NameGroup extends AppCompatActivity {
         Group group = CreateGroup.getGroup();
         group.setGroupState(true);
         group.setGroupName(group_name);
-        User curr_user = AuthActivity.mUser;
-        group.addUser(curr_user.getUserID());
-        curr_user.addGroup(group);
+        /*group.addUser(curr_user.getUserID());
+        curr_user.addGroup(group);*/
         Intent intent = new Intent(this, Gamble.class);
         intent.putExtra("group_name", group_name);
         startActivity(intent);

@@ -56,12 +56,12 @@ public class GamesAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        int id = m_items_arr.get(position).getId();
+        /*int id = m_items_arr.get(position).getId();
         if ( position == id){ //todo:delete
             System.out.println("Position is ID");
         }
-        return id;
-//        return position;
+        return id;*/
+        return position;
     }
 
     /**
@@ -83,7 +83,7 @@ public class GamesAdapter extends BaseAdapter{
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickSubmit(v);
+                    onClickCheckbox(v);
                 }});
         } else {
             view = inflate(m_context, R.layout.button_item, null);
@@ -91,7 +91,7 @@ public class GamesAdapter extends BaseAdapter{
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showGamesChosen(v);
+                    OnClickSubmit(v);
                 }});
         }
         b.setText(this.getItem(position).getText());
@@ -108,7 +108,7 @@ public class GamesAdapter extends BaseAdapter{
      * Present the user a correspondent message
      * @param box
      */
-    private void onClickSubmit(View box){
+    private void onClickCheckbox(View box){
         CheckBox event = (CheckBox) box;
         Toast toast;
         boolean checked = event.isChecked();
@@ -135,12 +135,12 @@ public class GamesAdapter extends BaseAdapter{
      * When clicking submit btn - pull from API info of games selected and insert info to DB.
      * @param view
      */
-    public void showGamesChosen(View view){
-        HashMap<String, Game> games_selected = new HashMap<>(); //string = group ID
+    public void OnClickSubmit(View view){
+        HashMap<String, String> games_selected = new HashMap<>(); //string = group ID
         String groupID = this.m_group.getGroupID();
         for (int j = 0; j<this.m_items_arr.size()-1; j++){
             CheckBox game =(CheckBox) this.m_items_arr.get(j);
-
+            // if checkbox is selected - add to games map.
             if(this.checked_map.get(j)){
                 int i = (Integer) game.getTag();
                 LinkedHashMap<String, String> details = new LinkedHashMap<>(8);
@@ -153,26 +153,9 @@ public class GamesAdapter extends BaseAdapter{
                     String strAwayTeam = m_events.getJSONObject(i).getString("strAwayTeam");
                     String dateEvent = m_events.getJSONObject(i).getString("dateEvent");
                     String strTimeLocal = m_events.getJSONObject(i).getString("strTimeLocal");
-                    /*
-                    details.put("idEvent",
-                            m_events.getJSONObject(i).getString("idEvent"));
-                    details.put("strEvent",
-                            m_events.getJSONObject(i).getString("strEvent"));
-                    details.put("idLeague",
-                            m_events.getJSONObject(i).getString("idLeague"));
-                    details.put("strLeague",
-                            m_events.getJSONObject(i).getString("strLeague"));
-                    details.put("strHomeTeam",
-                            m_events.getJSONObject(i).getString("strHomeTeam"));
-                    details.put("strAwayTeam",
-                            m_events.getJSONObject(i).getString("strAwayTeam"));
-                    details.put("dateEvent",
-                            m_events.getJSONObject(i).getString("dateEvent"));
-                    details.put("strTimeLocal",
-                            m_events.getJSONObject(i).getString("strTimeLocal"));
-                     */
-                    //TODO: create game correctly - get gameID
-                    games_selected.put("GameID", new Game(groupID, dateEvent, "GameID"));
+                    Game g = new Game(groupID, dateEvent, idEvent, strEvent);
+                    String game_entry = Game.uploadToDB(g);
+                    games_selected.put(game_entry, g.mGame_name);
                     /*boolean added = m_games_listJSON.addGame(String.valueOf(i), details);
                     if (!added){
                         System.out.println("didn't add games chosen");

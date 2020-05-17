@@ -18,8 +18,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class AuthActivity extends AppCompatActivity {
     CheckBox rememberMe;
@@ -77,11 +82,7 @@ public class AuthActivity extends AppCompatActivity {
 
     public void openMyGroupsActivity(String userID) {
         Intent intent = new Intent(this, MyGroups.class);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        // get the map between user id in authentication to user entry in user's database
-        DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
-        String user_entry = user_map_DB.child(userID).toString();
-        mUser = User.getUser(user_entry);
+        intent.putExtra("userIDAuth", userID);
         startActivity(intent);
     }
 
@@ -92,8 +93,6 @@ public class AuthActivity extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
-
-
 
     private void signIn(String email, String password){
         /////////////////////// TODO: delete from here //////////////////////////
@@ -134,5 +133,4 @@ public class AuthActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
