@@ -147,20 +147,10 @@ public class GamesAdapter extends BaseAdapter{
                 try{
                     String idEvent = m_events.getJSONObject(i).getString("idEvent");
                     String strEvent = m_events.getJSONObject(i).getString("strEvent");
-                    String idLeague = m_events.getJSONObject(i).getString("idLeague");
-                    String strLeague = m_events.getJSONObject(i).getString("strLeague");
-                    String strHomeTeam = m_events.getJSONObject(i).getString("strHomeTeam");
-                    String strAwayTeam = m_events.getJSONObject(i).getString("strAwayTeam");
                     String dateEvent = m_events.getJSONObject(i).getString("dateEvent");
-                    String strTimeLocal = m_events.getJSONObject(i).getString("strTimeLocal");
                     Game g = new Game(groupID, dateEvent, idEvent, strEvent);
                     String game_entry = Game.uploadToDB(g);
                     games_selected.put(game_entry, g.mGame_name);
-                    /*boolean added = m_games_listJSON.addGame(String.valueOf(i), details);
-                    if (!added){
-                        System.out.println("didn't add games chosen");
-                        //Toast.makeText(this, "added succesfuly"); //TODO: notification
-                    }*/
                 } catch (Exception e){
                     System.out.println(this.toString()+" line 183");
                 }
