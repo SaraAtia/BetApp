@@ -11,7 +11,8 @@ import java.util.HashMap;
 public class User {
     public String user_ID;
     public String user_name; //TODO: ask for name in authentication
-    public HashMap<String, String> m_groups; // groupName, groupID
+    public HashMap<String, String> m_groups = new HashMap<>(); // groupName, groupID
+
 
     public HashMap<String, String> getUserGroups() {
         return m_groups;

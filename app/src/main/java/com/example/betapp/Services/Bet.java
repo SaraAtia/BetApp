@@ -1,5 +1,7 @@
 package com.example.betapp.Services;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 //TODO: remove bet from database
@@ -36,6 +38,17 @@ public class Bet{
 
     public void setNumOfRedCards(String num_of_red_cards) {
         this.mNum_of_red_cards = num_of_red_cards;
+    }
+
+    public static String uploadToDB(Bet bet){
+        FirebaseDatabase DB = FirebaseDatabase.getInstance();
+        String entry = DB.getReference("bets").push().getKey();
+        try{
+            DB.getReference("bets").child(entry).setValue(bet);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return entry;
     }
 
 

@@ -1,33 +1,33 @@
 package com.example.betapp.Services;
 
+
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 //TODO: remove group from database
 
 public class Group {
 //    private HashMap<String, ArrayList<String>> group;
-    private boolean mState; // is the group active
     public String groupID;
     public String groupName;
     public ArrayList<String> users; // string = userID
-    public HashMap<String, ArrayList<String>> games_by_date;//Date:gamesID
+    public boolean status; // is the group active
     public HashMap<String, String> games; // gameID: name
+    private HashMap<String, ArrayList<String>> games_by_date;//Date:gamesID
     private HashMap<String, Integer> users_rank;//userID:rank
-
 
     public Group(String id){
         this.groupName = "";
         this.groupID = id;
         this.games_by_date = new HashMap<>();
         this.games = new HashMap<>();
-        this.mState = false;
+        this.status = false;
         this.users_rank = new HashMap<>();
         this.users = new ArrayList<>();
     }
 
+    public Group(){}
     public String getGroupID() {
         return groupID;
     }
@@ -59,8 +59,8 @@ public class Group {
         return group;
     }
 
-    public void setGroupState(boolean newState) {
-        this.mState = newState;
+    public void setGroupStatus(boolean newState) {
+        this.status = newState;
         // update status on DB
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DB.getReference("groups").child(this.groupID).child("status").setValue(newState);
@@ -88,10 +88,18 @@ public class Group {
         this.users.add(userID);
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DB.getReference("groups").child(this.groupID).
-                child("users").updateChildren((Map<String, Object>) this.users);
+                child("users").setValue(this.users);
     }
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
+    }
+
+    public void setUsers(ArrayList<String> users) {
+        this.users = users;
     }
 }

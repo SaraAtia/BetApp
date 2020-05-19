@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.betapp.Services.Group;
-import com.example.betapp.Services.User;
 
 /**
  * Name Group activity set groups name and update it in DB.
@@ -30,10 +29,10 @@ public class NameGroup extends AppCompatActivity {
         EditText text_name = (EditText) findViewById(R.id.group_name);
         String group_name = text_name.getText().toString();
         Group group = CreateGroup.getGroup();
-        group.setGroupState(true);
+        group.setGroupStatus(true);
         group.setGroupName(group_name);
-        /*group.addUser(curr_user.getUserID());
-        curr_user.addGroup(group);*/
+        group.addUser(MyGroups.mUser.getUserID());
+        MyGroups.mUser.addGroup(group);
         Intent intent = new Intent(this, Gamble.class);
         intent.putExtra("group_name", group_name);
         startActivity(intent);

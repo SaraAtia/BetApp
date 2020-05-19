@@ -52,26 +52,27 @@ public class ChooseLeagueGames extends AppCompatActivity {
         m_bundle = intent;
         String leagueId = intent.getStringExtra("leagueID");
         list = (ListView) findViewById(R.id.games_options_layout);
+        this.m_itemsArr = new ArrayList<>();
         try {
             JSONObject next15Games = HttpService.getInstance().
                     getJSON(Consts.NEXT15EVENTS_BY_LEAGUEID + leagueId);
             this.m_events = (JSONArray) next15Games.get("events"); //JSON with 15 next games.
             // create checkbox for each game
             this.m_itemsArr = createCheckboxes(m_events, leagueId);
-            createSubmitBtn();
-            // adapter contains all buttons to be presented in scrolled list
-            GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, m_events, m_gamesListJSON);
-            list.setAdapter(gamesAdapter); // update list of it's adapter
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ((GamesAdapter) list.getAdapter()).notifyDataSetChanged();
-                }
-            });
         } catch (Exception e) {
             System.out.println(this.toString() + " line 71");
             e.printStackTrace();
         }
+        createSubmitBtn();
+        // adapter contains all buttons to be presented in scrolled list
+        GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, m_events, m_gamesListJSON);
+        list.setAdapter(gamesAdapter); // update list of it's adapter
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((GamesAdapter) list.getAdapter()).notifyDataSetChanged();
+            }
+        });
     }
 
     /**

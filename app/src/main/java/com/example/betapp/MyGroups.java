@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.example.betapp.Services.Group;
 import com.example.betapp.Services.NotificationService;
@@ -33,7 +32,7 @@ public class MyGroups extends AppCompatActivity {
     private ArrayList<Group> user_groups;
     public final ArrayList<User> users = new ArrayList<>();
     public String mUserID;
-    public User mUser;
+    public static User mUser;
 
 
     @Override
