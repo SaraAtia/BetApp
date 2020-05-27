@@ -37,15 +37,15 @@ public class CreateGroup extends AppCompatActivity {
                     (getAssets().open(Consts.LEAGUES_FILE_NAME)));
             String line = buffer.readLine();
             String[] temp;
-            String key, val;
+            String league_id, league_name;
             while (line != null) {
                 temp = line.split(":");
-                val = temp[0];
-                key = temp[1];
-                btnMap.put(key, val);
+                league_name = temp[0];
+                league_id = temp[1];
+                btnMap.put(league_id, league_name);
                 final Button btnShow = new Button(this);
-                btnShow.setId(Integer.parseInt(key));
-                btnShow.setText(val);
+                btnShow.setId(Integer.parseInt(league_id));
+                btnShow.setText(league_name);
                 btnShow.setPadding(1, 1, 1, 1);
                 btnShow.setTextSize(15);
                 btnShow.setLayoutParams(new LinearLayout.LayoutParams
