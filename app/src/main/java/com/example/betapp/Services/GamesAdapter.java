@@ -170,13 +170,9 @@ public class GamesAdapter extends BaseAdapter{
             } catch (InterruptedException | ExecutionException| JSONException e) {
                 e.printStackTrace();
             }
-
-
-
         }
 
         this.m_group.setGroupGames(games_selected);
-//        this.m_games_listJSON.uploadToDB();
         Intent intent = new Intent(m_context, NameGroup.class);
         m_context.startActivity(intent);
     }
