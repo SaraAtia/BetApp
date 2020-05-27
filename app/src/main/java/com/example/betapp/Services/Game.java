@@ -1,6 +1,7 @@
 package com.example.betapp.Services;
 
 import com.example.betapp.Consts;
+import com.example.betapp.R;
 import com.example.betapp.Services.HttpService.HttpService;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,6 +37,16 @@ public class Game {
         this.mGame_details = new HashMap<>();
     }
 
+    public Game(String groupID, String gameID, String date,String gameID_API, String gameName, boolean available_to_bet){
+        this.mGroupID = groupID;
+        this.mGameID = gameID;
+        this.mGameID_API = gameID_API;
+        this.mDate = date;
+        this.mGame_name = gameName;
+        this.mUsers_bets = new HashMap<>();
+        this.mAvailable_to_bet = available_to_bet;
+        this.mGame_details = new HashMap<>();
+    }
     public Game(String groupID, String date, String gameID, String gameName) {
         this.mGroupID = groupID;
         this.mDate = date;
@@ -53,12 +64,16 @@ public class Game {
         }
     }
 
+    public void setAvailableToBet(boolean isAvailable){
+        this.mAvailable_to_bet = isAvailable;
+    }
+
     public static HashMap<String, String> getGameDetails(String gameID_API){
         HashMap<String, String> game_details = new HashMap<>();
         try {
-            JSONArray events_array =(JSONArray) HttpService.getInstance().
+            //TODO: does game info can be null (if game is over) ?
+            JSONObject game_info =(JSONObject) HttpService.getInstance().
                     getJSON(Consts.GAME_DETAILS_BY_EVENT_ID+gameID_API).get("events");
-            JSONObject game_info = (JSONObject) events_array.get(0);
             game_details.put("idEvent",game_info.getString("idEvent"));
             game_details.put("strEvent",game_info.getString("strEvent"));
             game_details.put("idLeague",game_info.getString("idLeague"));
@@ -80,6 +95,21 @@ public class Game {
         game.mGameID = entry;
         DB.getReference("games").child(entry).setValue(game);
         return entry;
+    }
+
+    public static Game getGame(String gameID) {
+        try{
+            JSONObject gamesJSON = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE);
+            JSONObject gameJSON = (JSONObject) gamesJSON.get(gameID);
+            Game game = new Game((String) gameJSON.get("mGroupID"), (String)gameJSON.get("mGameID"),
+                    (String)gameJSON.get("mDate"), (String)gameJSON.get("mGameID_API"),
+                    (String)gameJSON.get("mGame_name"), (boolean)gameJSON.get("mAvailable_to_bet"));
+            return game;
+
+        } catch (InterruptedException | ExecutionException| JSONException e){
+            e.printStackTrace();
+            return null; //TODO: to handle right
+        }
     }
 
     public void setGameID(String game_entry) {

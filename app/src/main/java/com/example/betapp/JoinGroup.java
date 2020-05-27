@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.betapp.Services.Group;
+import com.example.betapp.Services.GroupPresentation;
 import com.example.betapp.Services.User;
 
 public class JoinGroup extends AppCompatActivity {
@@ -24,8 +25,8 @@ public class JoinGroup extends AppCompatActivity {
         User user = AuthActivity.mUser;
         user.addGroup(group);
         group.addUser(user.getUserID());
-        Intent intent = new Intent(this, Gamble.class);
-        intent.putExtra("groupId", code);
+        Intent intent = new Intent(this, GroupPresentation.class);
+        intent.putExtra("groupID", code);
         startActivity(intent);
     }
 }

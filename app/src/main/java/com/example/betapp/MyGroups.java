@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.betapp.Services.Group;
+import com.example.betapp.Services.GroupPresentation;
 import com.example.betapp.Services.NotificationService;
 import com.example.betapp.Services.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class MyGroups extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_groups);
-        final LinearLayout l = findViewById(R.id.my_groups_layout);
+        final LinearLayout layout = findViewById(R.id.my_groups_layout);
         mAuth = FirebaseAuth.getInstance();
         // user ID as saved in authentication info
         final String userIDAuth = getIntent().getStringExtra("userIDAuth");
@@ -75,7 +76,7 @@ public class MyGroups extends AppCompatActivity {
                                             openGroup(v.getTag().toString());
                                         }
                                     });
-                                    l.addView(btnShow);
+                                    layout.addView(btnShow);
                                 }
                             }
                         }
@@ -94,7 +95,7 @@ public class MyGroups extends AppCompatActivity {
     }
 
     public void openGroup(String groupID){
-        Intent intent = new Intent(this, Gamble.class);//TODO: open group's screen
+        Intent intent = new Intent(this, GroupPresentation.class);
         intent.putExtra("groupID", groupID);
         startActivity(intent);
     }

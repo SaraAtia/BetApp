@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.betapp.Services.Bet;
 import com.example.betapp.Services.Game;
-import com.example.betapp.Services.Group;
 import com.example.betapp.Services.HttpService.HttpService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -42,10 +41,10 @@ public class Gamble extends AppCompatActivity {
     final HashMap<String, HashMap<String,String>> gamesDetails = new HashMap<>(); // gameID: {field:field_val}
     final HashMap<Integer, String> games_data_by_SN = new HashMap<>(); // serial_num: gameID
     int numOfGames;
-
+    String groupID;
     final ArrayList<String> home_score_arr = new ArrayList<>();
     final ArrayList<String> away_score_arr = new ArrayList<>();
-    final ArrayList<ArrayList<String>> scoring_players_arr = new ArrayList<>();
+    final ArrayList<ArrayList<String>> who_scored_arr = new ArrayList<>();
     final ArrayList<String> yellow_cards_arr = new ArrayList<>();
     final ArrayList<String> red_cards_arr = new ArrayList<>();
 
@@ -68,8 +67,10 @@ public class Gamble extends AppCompatActivity {
         awayScore = (EditText)findViewById(R.id.score_away_team_bet);
         yellowCards = (EditText)findViewById(R.id.yellow_cards_bet);
         redCards = (EditText)findViewById(R.id.red_cards_bet);
+        this.groupID = getIntent().getStringExtra("group_id");
+
         //todo: change next line to -  getGamesByGroupID(groupID);
-        getGamesByGroupID("-M7h40hrWiloAjKHwVM7");
+        getGamesByGroupID(groupID);
     }
 
     public void setNextGameParameters(){
@@ -137,6 +138,12 @@ public class Gamble extends AppCompatActivity {
 
         if(nextButton.getText().toString().equals("submit")){
             updateAllArrays();
+            for(int i = 0; i < this.away_score_arr.size(); ++i){
+                Bet bet = new Bet(this.home_score_arr.get(i), this.away_score_arr.get(i),
+                       this.yellow_cards_arr.get(i), this.red_cards_arr.get(i));
+                Bet.uploadToDB(bet);
+
+            }
             Toast.makeText(this, "data if saved in DB", Toast.LENGTH_LONG).show();
             for(String s: home_score_arr){
                 System.out.println(s);
@@ -219,7 +226,7 @@ public class Gamble extends AppCompatActivity {
                         ArrayList<ArrayList<String>> temp_arr = new ArrayList<>(numOfGames);
                         away_score_arr.addAll(Collections.nCopies(numOfGames, "Away Score"));
                         home_score_arr.addAll(Collections.nCopies(numOfGames, "Home Score"));
-                        scoring_players_arr.addAll(temp_arr);
+                        who_scored_arr.addAll(temp_arr);
                         yellow_cards_arr.addAll(Collections.nCopies(numOfGames, "Yellow"));
                         red_cards_arr.addAll(Collections.nCopies(numOfGames, "Red"));
                         setNextGameParameters();

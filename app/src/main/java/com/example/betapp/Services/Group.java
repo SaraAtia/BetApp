@@ -1,10 +1,17 @@
 package com.example.betapp.Services;
 
 
+import com.example.betapp.Consts;
+import com.example.betapp.Services.HttpService.HttpService;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 //TODO: remove group from database
 
 public class Group {
@@ -27,7 +34,9 @@ public class Group {
         this.users = new ArrayList<>();
     }
 
-    public Group(){}
+    public Group(){
+        this.groupName = "";
+    }
     public String getGroupID() {
         return groupID;
     }
@@ -43,13 +52,18 @@ public class Group {
      * @param groupId - string
      */
     public static Group getGroup(String groupId){
-        return null; //TODO: pull from DB
+        try{
+            JSONObject gameJSON = HttpService.getInstance().getJSON(Consts.GROUPS_DATABASE);
+            Object group =  gameJSON.get(groupId);
+            return (Group) group;
+
+        } catch (InterruptedException | ExecutionException | JSONException e){
+            return null; //TODO: to handle right
+        }
+        //return null; //TODO: pull from DB
 //        return new Group();
     }
 
-    public ArrayList<Game> getGames(){
-        return null; //TODO
-    }
 
     public static Group createGroupOnDB(){
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
@@ -66,12 +80,13 @@ public class Group {
         DB.getReference("groups").child(this.groupID).child("status").setValue(newState);
     }
 
-    public void setGroupName(String group_name) {
+    public void updateGroupName(String group_name) {
         this.groupName = group_name;
         // update name on DB
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
-        DB.getReference("groups").child(this.groupID).
-                child("groupName").setValue(group_name);
+        DatabaseReference curr_group = DB.getReference("groups").child(this.groupID);
+        DatabaseReference group_name_field = curr_group.child("groupName");
+        group_name_field.setValue(group_name);
     }
 
     public void setGroupGames(HashMap<String, String> games) { //todo:

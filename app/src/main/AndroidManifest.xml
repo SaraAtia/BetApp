@@ -12,10 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NameGroup"/>
-        <activity android:name=".RankingTable"
+        <activity android:name=".GamePresentation"></activity>
+        <activity android:name=".AllGamesPresentation" />
+        <activity android:name=".Services.GroupPresentation" />
+        <activity android:name=".NameGroup" />
+        <activity
+            android:name=".RankingTable"
             android:label="My Activity"
-            android:screenOrientation="fullSensor"></activity>
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".popupPlayersList"
             android:theme="@style/AppTheme.CustomTheme" />

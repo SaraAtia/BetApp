@@ -19,7 +19,7 @@ public class CreateGroup extends AppCompatActivity {
     final static HashMap<String, String> btnMap = new HashMap<>();
     Intent m_intent;
     static int count_games = 1;
-    static HashMap<String, Boolean[]> chosenGames = new HashMap<>();
+    static HashMap<String, Boolean[]> chosenGames = new HashMap<>(); // league id: games_selected from next 15
     static Group m_my_group = Group.createGroupOnDB(); //TODO: don't create new group every entry to activity
 
     @Override

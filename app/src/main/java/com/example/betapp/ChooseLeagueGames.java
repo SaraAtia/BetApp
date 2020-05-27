@@ -65,7 +65,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
         }
         createSubmitBtn();
         // adapter contains all buttons to be presented in scrolled list
-        GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, m_events, m_gamesListJSON);
+        GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, CreateGroup.chosenGames, leagueId, m_gamesListJSON);
         list.setAdapter(gamesAdapter); // update list of it's adapter
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

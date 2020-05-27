@@ -2,16 +2,25 @@ package com.example.betapp.Services;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 //TODO: remove bet from database
 public class Bet{
     private String mBetID;
-    private String mHome_team_score;
-    private String mAway_team_score;
-    private LinkedList<String> mWho_scored;
-    private String mNum_of_yellow_cards;
-    private String mNum_of_red_cards;
+    public String mHome_team_score;
+    public String mAway_team_score;
+    public ArrayList<String> mWho_scored;
+    public String mNum_of_yellow_cards;
+    public String mNum_of_red_cards;
+
+    public Bet(String homeTeamScore, String awayTeamScore, String numOYellowCards,
+               String numOfRedCards){
+        this.mHome_team_score = homeTeamScore;
+        this.mAway_team_score = awayTeamScore;
+        this.mNum_of_yellow_cards = numOYellowCards;
+        this.mNum_of_red_cards = numOfRedCards;
+    }
 
     public void setAllBet(HashMap<String, String> bets){
 
@@ -28,7 +37,7 @@ public class Bet{
         this.mAway_team_score = away_team_score;
     }
 
-    public void setWhoScored(LinkedList<String> who_scored) {
+    public void setWhoScored(ArrayList<String> who_scored) {
         this.mWho_scored = who_scored;
     }
 
@@ -43,11 +52,8 @@ public class Bet{
     public static String uploadToDB(Bet bet){
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         String entry = DB.getReference("bets").push().getKey();
-        try{
-            DB.getReference("bets").child(entry).setValue(bet);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        bet.mBetID = entry;
+        DB.getReference("bets").child(entry).setValue(bet);
         return entry;
     }
 

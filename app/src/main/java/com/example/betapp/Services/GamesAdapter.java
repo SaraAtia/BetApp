@@ -10,14 +10,21 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.example.betapp.Consts;
 import com.example.betapp.CreateGroup;
 import com.example.betapp.GamesList;
 import com.example.betapp.NameGroup;
 import com.example.betapp.R;
+import com.example.betapp.Services.HttpService.HttpService;
+
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.concurrent.ExecutionException;
 
 import static android.view.View.inflate;
 
@@ -29,15 +36,17 @@ public class GamesAdapter extends BaseAdapter{
     private Group m_group;
     private ArrayList<Button> m_items_arr;
     private HashMap<Integer, Boolean> checked_map;
-    private JSONArray m_events;
+    private String league_id;
+    private HashMap<String, Boolean[]> mGames_selected; //league_id:next game and true or false if selected
     private int MAX_GAMES_TO_CHOOSE = 3;
     private final GamesList m_games_listJSON;
-    public GamesAdapter(Context c, ArrayList<Button> items, JSONArray events, GamesList gamesList ){
+    public GamesAdapter(Context c, ArrayList<Button> items, HashMap<String, Boolean[]> games_selected, String curr_league_id, GamesList gamesList ){
         this.m_context = c;
         this.m_items_arr = items;
-        this.m_events = events;
         this.m_games_listJSON = gamesList;
+        this.mGames_selected = games_selected;
         this.m_group = CreateGroup.getGroup();
+        this.league_id = curr_league_id;
         int checkbox_amount = m_items_arr.size()-1;
         this.checked_map = new HashMap<>(checkbox_amount);
         for(int i = 0; i< checkbox_amount; i++){
@@ -136,26 +145,36 @@ public class GamesAdapter extends BaseAdapter{
      * @param view
      */
     public void OnClickSubmit(View view){
+        mGames_selected.put(league_id, checked_map.values().toArray(new Boolean[15]));
         HashMap<String, String> games_selected = new HashMap<>(); //string = group ID
         String groupID = this.m_group.getGroupID();
-        for (int j = 0; j<this.m_items_arr.size()-1; j++){
-            CheckBox game =(CheckBox) this.m_items_arr.get(j);
-            // if checkbox is selected - add to games map.
-            if(this.checked_map.get(j)){
-                int i = (Integer) game.getTag();
-                LinkedHashMap<String, String> details = new LinkedHashMap<>(8);
-                try{
-                    String idEvent = m_events.getJSONObject(i).getString("idEvent");
-                    String strEvent = m_events.getJSONObject(i).getString("strEvent");
-                    String dateEvent = m_events.getJSONObject(i).getString("dateEvent");
-                    Game g = new Game(groupID, dateEvent, idEvent, strEvent);
-                    String game_entry = Game.uploadToDB(g);
-                    games_selected.put(game_entry, g.mGame_name);
-                } catch (Exception e){
-                    System.out.println(this.toString()+" line 183");
+        // go over all league which games where selected from and add them to map games_selected
+        for(String leagueId: this.mGames_selected.keySet()){
+            try {
+                // pull next 15 games of league selected
+                JSONArray league_gamesJSON = (JSONArray) HttpService.getInstance().
+                        getJSON(Consts.NEXT15EVENTS_BY_LEAGUEID + leagueId).get("events");
+                // array indicated games selected from league
+                Boolean[] league_games = mGames_selected.get(leagueId);
+                for (int j = 0; j<league_games.length; j++) {
+                    // if game is selected - add to games map.
+                    if (league_games[j]!= null && league_games[j]) {
+                        String idEvent = league_gamesJSON.getJSONObject(j).getString("idEvent");
+                        String strEvent = league_gamesJSON.getJSONObject(j).getString("strEvent");
+                        String dateEvent = league_gamesJSON.getJSONObject(j).getString("dateEvent");
+                        Game g = new Game(groupID, dateEvent, idEvent, strEvent);
+                        String game_entry = Game.uploadToDB(g);
+                        games_selected.put(game_entry, g.mGame_name);
+                    }
                 }
+            } catch (InterruptedException | ExecutionException| JSONException e) {
+                e.printStackTrace();
             }
+
+
+
         }
+
         this.m_group.setGroupGames(games_selected);
 //        this.m_games_listJSON.uploadToDB();
         Intent intent = new Intent(m_context, NameGroup.class);
