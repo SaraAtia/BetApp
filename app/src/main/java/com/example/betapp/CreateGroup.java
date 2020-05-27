@@ -20,12 +20,13 @@ public class CreateGroup extends AppCompatActivity {
     Intent m_intent;
     static int count_games = 1;
     static HashMap<String, Boolean[]> chosenGames = new HashMap<>(); // league id: games_selected from next 15
-    static Group m_my_group = Group.createGroupOnDB(); //TODO: don't create new group every entry to activity
+    static Group m_my_group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+        m_my_group = Group.createGroupOnDB();
         addGroupsBtns();
     }
     public void addGroupsBtns(){
