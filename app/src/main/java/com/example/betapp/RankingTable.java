@@ -73,30 +73,32 @@ public class RankingTable extends AppCompatActivity {
 
 
         int i = 1;
-        for(String s: finalRank.keySet()){
-            TableRow tr =  new TableRow(this);
-            tr.setBackgroundColor(Color.parseColor("#000000"));
-            tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                    0,1));
+        for(int j = 0; j < 40; j++) {
+            for (String s : finalRank.keySet()) {
+                TableRow tr = new TableRow(this);
+                tr.setBackgroundColor(Color.parseColor("#000000"));
+                tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                        0, 1));
 
-            UserBets userBets = group.getUserByID(s);
-            Bet bet = userBets.getBetByMatchName("a vs b");
+                UserBets userBets = group.getUserByID(s);
+                Bet bet = userBets.getBetByMatchName("a vs b");
 
-            TextView rank = createTextView(String.valueOf(i++), 0);
-            TextView userName = createTextView(s, 1);
-            TextView matchScore = createTextView(bet.getHomeTeamScore() + " - " + bet.getAwayTeamScore(), 2);
-            TextView scoringPlayers = createTextView(bet.scoringPlayersToString(), 3);
-            TextView yellowCards = createTextView(String.valueOf(bet.getNumOYellowCards()), 4);
-            TextView redCards = createTextView(String.valueOf(bet.getNumOfRedCards()), 5);
+                TextView rank = createTextView(String.valueOf(i++), 0);
+                TextView userName = createTextView(s, 1);
+                TextView matchScore = createTextView(bet.getHomeTeamScore() + " - " + bet.getAwayTeamScore(), 2);
+                TextView scoringPlayers = createTextView(bet.scoringPlayersToString(), 3);
+                TextView yellowCards = createTextView(String.valueOf(bet.getNumOYellowCards()), 4);
+                TextView redCards = createTextView(String.valueOf(bet.getNumOfRedCards()), 5);
 
-            tr.addView(rank);
-            tr.addView(userName);
-            tr.addView(matchScore);
-            tr.addView(scoringPlayers);
-            tr.addView(yellowCards);
-            tr.addView(redCards);
+                tr.addView(rank);
+                tr.addView(userName);
+                tr.addView(matchScore);
+                tr.addView(scoringPlayers);
+                tr.addView(yellowCards);
+                tr.addView(redCards);
 
-            victory_table.addView(tr);
+                victory_table.addView(tr);
+            }
         }
 
     }
@@ -110,6 +112,7 @@ public class RankingTable extends AppCompatActivity {
         tv.setGravity(Gravity.CENTER);
         tv.setTextAppearance(this, android.R.style.TextAppearance_Large);
         tv.setText(text);
+        tv.setTextSize(17);
         TableRow.LayoutParams tvParams = new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT
