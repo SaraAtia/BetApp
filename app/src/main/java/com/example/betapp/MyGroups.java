@@ -60,6 +60,7 @@ public class MyGroups extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             mUser = dataSnapshot.child(mUserID).getValue(User.class);
+                            AuthActivity.mUser = mUser;
                             HashMap<String, String> groups = mUser.getUserGroups();
                             if (groups != null) {
                                 Object[] groups_names = groups.keySet().toArray();

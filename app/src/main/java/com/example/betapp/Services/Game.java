@@ -22,7 +22,7 @@ public class Game {
     public String mGameID_API;
     public String mGame_name;
     public boolean mAvailable_to_bet;
-    private HashMap<String, String> mUsers_bets; //user id, bet id
+    public HashMap<String, String> mUsers_bets; //user id, bet id
     private HashMap<String, String> mGame_details; //game info
     private boolean isFinished;
 

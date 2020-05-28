@@ -23,7 +23,6 @@
        android:layout_height="wrap_content"
        android:layout_centerHorizontal="true"
        android:layout_marginTop="130dp"
-       android:text="team1 vs team2"
        android:textSize="25sp" />
 
 
@@ -110,23 +109,13 @@
        android:textSize="20sp" />
 
    <Button
-       android:id="@+id/previous_game"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentBottom="true"
-       android:onClick="previousGame"
-       android:text="previous game"
-       android:textSize="12sp" />
-
-   <Button
-       android:id="@+id/next_game"
+       android:id="@+id/submit_btn"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentRight="true"
        android:layout_alignParentBottom="true"
-       android:onClick="nextGame"
-       android:text="next game"
+       android:onClick="submitBet"
+       android:text="@string/submit"
        android:textSize="12sp" />
 
 </RelativeLayout>

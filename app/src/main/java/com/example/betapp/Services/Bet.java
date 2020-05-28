@@ -25,6 +25,11 @@ public class Bet{
     public void setAllBet(HashMap<String, String> bets){
 
     }
+
+    public String getmBetID() {
+        return mBetID;
+    }
+
     public void setBetID(String m_betID) {
         this.mBetID = m_betID;
     }

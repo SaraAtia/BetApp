@@ -35,7 +35,7 @@ public class GamePresentation extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, Gamble.class);
-                        intent.putExtra("groupID", curr_game.mGroupID);
+                        intent.putExtra("gameID", curr_game.mGameID);
                         startActivity(intent);
                     }
                 });
