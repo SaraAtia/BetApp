@@ -1,29 +1,35 @@
 package com.example.betapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.betapp.Services.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import android.view.inputmethod.InputMethodManager;
+import java.util.ArrayList;
 
 public class AuthActivity extends AppCompatActivity {
     CheckBox rememberMe;
     private FirebaseAuth mAuth;
+    public static User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -38,7 +44,8 @@ public class AuthActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-        openMyLeaguesActivity();
+            System.out.println(currentUser.getUid());
+            openMyGroupsActivity(currentUser.getUid());
         }
     }
 
@@ -73,8 +80,9 @@ public class AuthActivity extends AppCompatActivity {
 
     }
 
-    public void openMyLeaguesActivity() {
-        Intent intent = new Intent(this, MyLeagues.class);
+    public void openMyGroupsActivity(String userID) {
+        Intent intent = new Intent(this, MyGroups.class);
+        intent.putExtra("userIDAuth", userID);
         startActivity(intent);
     }
 
@@ -86,14 +94,12 @@ public class AuthActivity extends AppCompatActivity {
         toast.show();
     }
 
-
-
     private void signIn(String email, String password){
         /////////////////////// TODO: delete from here //////////////////////////
-        if(email.isEmpty()){
+       /* if(email.isEmpty()){
             email = "sara@betapp.com";
             password = "123456";
-        }
+        }*/
         /////********************* Till here *************************//////////////////
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -102,7 +108,8 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            openMyLeaguesActivity();
+                            System.out.println(user.getUid());
+                            openMyGroupsActivity(user.getUid());
                         } else {
                             popupMessage("Credentials incorrect");
                         }
@@ -118,12 +125,12 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            openMyLeaguesActivity();
+                            System.out.println(user.getUid());
+                            openMyGroupsActivity(user.getUid());
                         } else {
                             popupMessage("Can't create account");
                         }
                     }
                 });
     }
-
 }

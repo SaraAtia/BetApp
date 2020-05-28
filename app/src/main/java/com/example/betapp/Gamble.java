@@ -10,17 +10,26 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.betapp.Services.Bet;
+import com.example.betapp.Services.Game;
 import com.example.betapp.Services.HttpService.HttpService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-public class GambleWin extends AppCompatActivity {
+public class Gamble extends AppCompatActivity {
 
     ArrayList<String> playersFromPopupWindow = popupPlayersList.players;
 
@@ -29,15 +38,15 @@ public class GambleWin extends AppCompatActivity {
     Button nextButton, prevButton, scoredForHomeButton, scoredForAwayButton;
     EditText homeScore, awayScore, yellowCards, redCards;
     int counter = 0;
-
-    LinkedHashMap<Integer, LinkedHashMap<String,String>> gamesDetails = getGamesByGroupId("gsi");
-    int numOfGames = gamesDetails.size();
-
-    ArrayList<String> home_score_arr = new ArrayList<>(Collections.nCopies(numOfGames, "Home Score"));
-    ArrayList<String> away_score_arr = new ArrayList<>(Collections.nCopies(numOfGames, "Away Score"));
-    ArrayList<ArrayList<String>> scoring_players_arr = new ArrayList<>(numOfGames);
-    ArrayList<String> yellow_cards_arr = new ArrayList<>(Collections.nCopies(numOfGames, "Yellow"));
-    ArrayList<String> red_cards_arr = new ArrayList<>(Collections.nCopies(numOfGames, "Red"));
+    final HashMap<String, HashMap<String,String>> gamesDetails = new HashMap<>(); // gameID: {field:field_val}
+    final HashMap<Integer, String> games_data_by_SN = new HashMap<>(); // serial_num: gameID
+    int numOfGames;
+    String groupID;
+    final ArrayList<String> home_score_arr = new ArrayList<>();
+    final ArrayList<String> away_score_arr = new ArrayList<>();
+    final ArrayList<ArrayList<String>> who_scored_arr = new ArrayList<>();
+    final ArrayList<String> yellow_cards_arr = new ArrayList<>();
+    final ArrayList<String> red_cards_arr = new ArrayList<>();
 
 
     //String: user name, JSONOBJECT: user's bets
@@ -47,8 +56,8 @@ public class GambleWin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gamble_win);
-
+        setContentView(R.layout.activity_gamble);
+       // String groupID = getIntent().getStringExtra("groupID");
         gameString = (TextView)findViewById(R.id.game_str);
         nextButton = (Button)findViewById(R.id.next_game);
         prevButton = (Button)findViewById(R.id.previous_game);
@@ -58,13 +67,16 @@ public class GambleWin extends AppCompatActivity {
         awayScore = (EditText)findViewById(R.id.score_away_team_bet);
         yellowCards = (EditText)findViewById(R.id.yellow_cards_bet);
         redCards = (EditText)findViewById(R.id.red_cards_bet);
+        this.groupID = getIntent().getStringExtra("group_id");
 
-        setNextGameParameters();
+        //todo: change next line to -  getGamesByGroupID(groupID);
+        getGamesByGroupID(groupID);
     }
 
     public void setNextGameParameters(){
-        String gameS = ((gamesDetails.get(counter)).get("strEvent"));
-        gameString.setText((gamesDetails.get(counter)).get("strEvent"));
+        String gameID = games_data_by_SN.get(counter);
+        String gameS = gamesDetails.get(gameID).get("strEvent");
+        gameString.setText(gameS);
         if(home_score_arr.get(counter).equals("Home Score") && away_score_arr.get(counter).equals("Away Score") && yellow_cards_arr.get(counter).equals("Yellow") &&
         red_cards_arr.get(counter).equals("Red")){ //TODO:change condition, find a way to include players, or find a way to short the condition.
             homeScore.setHint(home_score_arr.get(counter));
@@ -83,7 +95,6 @@ public class GambleWin extends AppCompatActivity {
             redCards.setText(red_cards_arr.get(counter));
         }
     }
-
     public void updateParameter(String currentValue, ArrayList<String> arr){
         if(!arr.get(counter).equals(currentValue)){
             arr.set(counter,currentValue);
@@ -111,7 +122,7 @@ public class GambleWin extends AppCompatActivity {
 //        }catch (Exception e){
 //            System.out.println("GambleWin line 108"); //TODO: change exception
 //        }
-        startActivity(new Intent(GambleWin.this, popupPlayersList.class));
+        startActivity(new Intent(Gamble.this, popupPlayersList.class));
     }
 
     public void awayTeamPlayers(View view){
@@ -120,12 +131,19 @@ public class GambleWin extends AppCompatActivity {
 //        }catch (Exception e){
 //            System.out.println("GambleWin line 108"); //TODO: change exception
 //        }
-        startActivity(new Intent(GambleWin.this, popupPlayersList.class));
+        startActivity(new Intent(Gamble.this, popupPlayersList.class));
     }
 
     public void nextGame(View view){
 
         if(nextButton.getText().toString().equals("submit")){
+            updateAllArrays();
+            for(int i = 0; i < this.away_score_arr.size(); ++i){
+                Bet bet = new Bet(this.home_score_arr.get(i), this.away_score_arr.get(i),
+                       this.yellow_cards_arr.get(i), this.red_cards_arr.get(i));
+                Bet.uploadToDB(bet);
+
+            }
             Toast.makeText(this, "data if saved in DB", Toast.LENGTH_LONG).show();
             for(String s: home_score_arr){
                 System.out.println(s);
@@ -178,35 +196,52 @@ public class GambleWin extends AppCompatActivity {
         }
     }
 
-    public LinkedHashMap<Integer, LinkedHashMap<String,String>> getGamesByGroupId(String groupId){
-        LinkedHashMap<Integer, LinkedHashMap<String,String>> details = new LinkedHashMap<>(3);
-        LinkedHashMap<String,String> game1 = new LinkedHashMap<>();
-        game1.put("idEvent", "602439");
-        game1.put("strEvent", "Aston Villa vs Wolves");
-        game1.put("strHomeTeam", "Aston Villa");
-        game1.put("strAwayTeam", "Wolves");
-        game1.put("idHomeTeam", "133601");
-        game1.put("idAwayTeam", "133599");
-        LinkedHashMap<String,String> game2 = new LinkedHashMap<>();
-        game2.put("idEvent", "602441");
-        game2.put("strEvent", "Bournemouth vs Newcastle");
-        game2.put("strHomeTeam", "Bournemouth");
-        game2.put("strAwayTeam", "Newcastle");
-        game2.put("idHomeTeam", "134301");
-        game2.put("idAwayTeam", "134777");
-        LinkedHashMap<String,String> game3 = new LinkedHashMap<>();
-        game3.put("idEvent", "602443");
-        game3.put("strEvent", "Brighton vs Man United");
-        game3.put("strHomeTeam", "Brighton");
-        game3.put("strAwayTeam", "Man United");
-        game3.put("idHomeTeam", "133619");
-        game3.put("idAwayTeam", "133612");
+    /**
+     * Read from DB group's games to bet on and read the games data from API.
+     * @param groupID groupID on DB
+     */
+    public void getGamesByGroupID(final String groupID){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        // get the map between user id in authentication to user entry in user's database
+        DatabaseReference groupsDB = database.getReference("groups");
+        groupsDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot groupSnapshot =  dataSnapshot.child(groupID);
+                HashMap<String, String> group_games = (HashMap<String, String>)groupSnapshot.child("games").getValue();
+                final Set games_ID = group_games.keySet();
+                DatabaseReference gamesDB = database.getReference("games");
+                gamesDB.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int count = 0;
+                        for (Object gameID: games_ID) {
+                            String id = (String) gameID;
+                            Game g = dataSnapshot.child((String) gameID).getValue(Game.class);
+                            gamesDetails.put(id, Game.getGameDetails(g.mGameID_API));
+                            games_data_by_SN.put(count, id);
+                            count++;
+                        }
+                        numOfGames = gamesDetails.size();
+                        ArrayList<ArrayList<String>> temp_arr = new ArrayList<>(numOfGames);
+                        away_score_arr.addAll(Collections.nCopies(numOfGames, "Away Score"));
+                        home_score_arr.addAll(Collections.nCopies(numOfGames, "Home Score"));
+                        who_scored_arr.addAll(temp_arr);
+                        yellow_cards_arr.addAll(Collections.nCopies(numOfGames, "Yellow"));
+                        red_cards_arr.addAll(Collections.nCopies(numOfGames, "Red"));
+                        setNextGameParameters();
+                    }
 
-        details.put(0, game1);
-        details.put(1, game2);
-        details.put(2, game3);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
 
-        return details;
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
 

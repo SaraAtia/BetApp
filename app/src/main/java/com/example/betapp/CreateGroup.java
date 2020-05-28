@@ -8,42 +8,45 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.betapp.Services.Group;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 public class CreateGroup extends AppCompatActivity {
     final static HashMap<String, String> btnMap = new HashMap<>();
     Intent m_intent;
     static int count_games = 1;
-    static HashMap<String, Boolean[]> chosenGames = new HashMap<>();
+    static HashMap<String, Boolean[]> chosenGames = new HashMap<>(); // league id: games_selected from next 15
+    static Group m_my_group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
-        addLeaguesBtns();
+        m_my_group = Group.createGroupOnDB();
+        addGroupsBtns();
     }
-    public void addLeaguesBtns(){
+    public void addGroupsBtns(){
         LinearLayout l = findViewById(R.id.choose_leagues_layout);
         BufferedReader buffer = null;
         try {
+            // read from const file the leagues names and create btn for each league
             buffer = new BufferedReader(new InputStreamReader
                     (getAssets().open(Consts.LEAGUES_FILE_NAME)));
             String line = buffer.readLine();
             String[] temp;
-            String key, val;
+            String league_id, league_name;
             while (line != null) {
                 temp = line.split(":");
-                val = temp[0];
-                key = temp[1];
-                btnMap.put(key, val);
+                league_name = temp[0];
+                league_id = temp[1];
+                btnMap.put(league_id, league_name);
                 final Button btnShow = new Button(this);
-                btnShow.setId(Integer.parseInt(key));
-                btnShow.setText(val);
+                btnShow.setId(Integer.parseInt(league_id));
+                btnShow.setText(league_name);
                 btnShow.setPadding(1, 1, 1, 1);
                 btnShow.setTextSize(15);
                 btnShow.setLayoutParams(new LinearLayout.LayoutParams
@@ -52,7 +55,7 @@ public class CreateGroup extends AppCompatActivity {
                 btnShow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openLeaguesGame(btnMap, btnShow);
+                        openLeagueGames(btnMap, btnShow);
                     }
                 });
                 l.addView(btnShow);
@@ -77,7 +80,10 @@ public class CreateGroup extends AppCompatActivity {
     public static int getCounter() {
         return count_games;
     }
-    public void openLeaguesGame(HashMap<String, String> btnMap, Button btnShow){
+    public static Group getGroup() {
+        return m_my_group;
+    }
+    public void openLeagueGames(HashMap<String, String> btnMap, Button btnShow){
         if(m_intent == null) {
             m_intent = new Intent(this, ChooseLeagueGames.class);
         }
