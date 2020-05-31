@@ -79,4 +79,7 @@ public class PlayersAdapter extends BaseAdapter {
         b.setTag(this.mPlayers_view.get(position).getTag());
         return view;
     }
+    public ArrayList<CheckBox> getPlayersView() {
+        return mPlayers_view;
+    }
 }

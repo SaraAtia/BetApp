@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class Gamble extends AppCompatActivity {
@@ -30,7 +32,8 @@ public class Gamble extends AppCompatActivity {
     Button submitButton, scoredForHomeButton, scoredForAwayButton;
     EditText homeScore, awayScore, yellowCards, redCards;
     String away_teamID, home_teamID;
-    public static final HashMap<String, HashMap<Integer, Boolean>> teamPlayersChecked = new HashMap<>(2);
+    public static HashMap<String, ArrayList<CheckBox>> players_view_by_teamID;
+    public static final HashMap<String, HashMap<Integer, Boolean>> teamPlayersChecked = new HashMap<>(2);//teamID:checked players(int=position, boolean=isChecked)
 //    ArrayList<String> who_scored = new ArrayList<>();
     String gameID;
 //Todo: not allow submit a bet with an empty field
@@ -41,6 +44,7 @@ public class Gamble extends AppCompatActivity {
         setContentView(R.layout.activity_gamble);
         gameID = getIntent().getStringExtra("gameID");
         gameString = (TextView)findViewById(R.id.game_str);
+        players_view_by_teamID = new HashMap<>();
         try {
             JSONObject game_details = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE)
                     .getJSONObject(gameID);
@@ -61,7 +65,6 @@ public class Gamble extends AppCompatActivity {
 
     public void homeTeamPlayers(View view){
         Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
-//        intent.putExtra("away_teamID", this.away_teamID);
         intent.putExtra("teamID", this.home_teamID);
         startActivity(intent);
     }
@@ -69,16 +72,29 @@ public class Gamble extends AppCompatActivity {
     public void awayTeamPlayers(View view){
         Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
         intent.putExtra("teamID", this.away_teamID);
-//        intent.putExtra("home_teamID", this.home_teamID);
         startActivity(intent);
     }
 
-    public HashMap<String, HashMap<String, String>> getPlayersInfo(){
-        return null;//TODO
+    /**
+     * create a map containing all info of players selected from each team
+     * @return
+     */
+    public HashMap<String, String> getSelectedPlayers(String teamID){
+        HashMap<String, String> players_selected = new HashMap<>();
+        HashMap<Integer, Boolean> players_by_teamID= this.teamPlayersChecked.get(teamID);
+        ArrayList<CheckBox> players_info_by_teamID = players_view_by_teamID.get(teamID);
+        for(Map.Entry<Integer, Boolean> entry: players_by_teamID.entrySet()){
+            if(entry.getValue()){
+                CheckBox player_checkbox = players_info_by_teamID.get(entry.getKey());
+                players_selected.put(player_checkbox.getTag().toString(), player_checkbox.getText().toString());
+            }
+        }
+        return players_selected;
     }
     public void submitBet(View view){
         Bet bet = new Bet(this.homeScore.getText().toString(),this.awayScore.getText().toString(),
-                this.yellowCards.getText().toString(), this.redCards.getText().toString(), getPlayersInfo());
+                this.yellowCards.getText().toString(), this.redCards.getText().toString(),
+                getSelectedPlayers(this.home_teamID), getSelectedPlayers(this.away_teamID));
         Bet.uploadToDB(bet);
         String betID = bet.getmBetID();
         String userID = AuthActivity.mUser.user_ID;

@@ -94,9 +94,9 @@ public class PopupPlayersList extends AppCompatActivity {
     private boolean showPlayersInfo(String teamID){
         JSONArray playersJSON = getPlayersByTeamID(teamID);
         ArrayList<CheckBox> players_view = new ArrayList<>();
+        Gamble.players_view_by_teamID.put(teamID, players_view);
         try {
             HashMap<String, String> players_map = getPlayersByJSON(playersJSON);
-            //TODO: in for loop create Checkbox for each player
             for(Map.Entry<String, String> player_info : players_map.entrySet()){
                 CheckBox player_view = new CheckBox(this);
                 player_view.setText(player_info.getValue());

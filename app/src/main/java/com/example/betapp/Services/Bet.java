@@ -9,17 +9,19 @@ public class Bet {
     private String mBetID;
     public String mHome_team_score;
     public String mAway_team_score;
-    public HashMap<String, HashMap<String, String>> mPlayers_scored_by_teamID; //id : name
+    public HashMap<String, String> mAway_team_players_scored;// id: name
+    public HashMap<String, String> mHome_team_players_scored;
     public String mNum_of_yellow_cards;
     public String mNum_of_red_cards;
 
     public Bet(String homeTeamScore, String awayTeamScore, String numOYellowCards,
-               String numOfRedCards, HashMap<String, HashMap<String, String>> players_scored) {
+               String numOfRedCards,  HashMap<String, String> home_team_players_scored, HashMap<String, String> away_team_players_scored) {
         this.mHome_team_score = homeTeamScore;
         this.mAway_team_score = awayTeamScore;
         this.mNum_of_yellow_cards = numOYellowCards;
         this.mNum_of_red_cards = numOfRedCards;
-        this.mPlayers_scored_by_teamID = players_scored;
+        this.mHome_team_players_scored = home_team_players_scored;
+        this.mAway_team_players_scored = away_team_players_scored;
     }
 
     public String getmBetID() {
