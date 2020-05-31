@@ -97,8 +97,5 @@ public class Gamble extends AppCompatActivity {
         }
         startActivity(intent);
     }
-
-
-
 }
 

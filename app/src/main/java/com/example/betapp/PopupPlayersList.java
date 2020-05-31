@@ -111,6 +111,5 @@ public class PopupPlayersList extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
-
     }
 }

@@ -19,13 +19,11 @@ public class PlayersAdapter extends BaseAdapter {
 
     private final Context mContext;
     private final ArrayList<CheckBox> mPlayers_view;
-    //private final HashMap<String, String> all_players_info; //id_in_api:player_name
     private final HashMap<Integer, Boolean> mChecked_map; //position:isChecked - contain all players
 
     public PlayersAdapter(Context c, ArrayList<CheckBox> items, String teamID){
         this.mContext = c;
         this.mPlayers_view = items;
-       //this.all_players_info = players_info;
         int players_size = mPlayers_view.size();
 
         if(Gamble.teamPlayersChecked.get(teamID) == null) {

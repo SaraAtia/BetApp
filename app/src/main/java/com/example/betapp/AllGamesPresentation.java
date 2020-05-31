@@ -62,5 +62,4 @@ public class AllGamesPresentation extends AppCompatActivity {
          intent.putExtra("gameID", gameID);
          startActivity(intent);
      }
-
 }
