@@ -7,22 +7,14 @@
     android:background="#E4D2F1"
     tools:context=".Gamble">
 
-   <TextView
-       android:id="@+id/headline"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_centerInParent="true"
-       android:layout_marginTop="40dp"
-       android:text="@string/gamble_headline"
-       android:textSize="30sp" />
 
    <TextView
        android:id="@+id/game_str"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
-       android:layout_marginTop="130dp"
+       android:layout_alignParentTop="true"
+       android:layout_centerInParent="true"
+       android:layout_marginTop="40dp"
        android:textSize="25sp" />
 
 

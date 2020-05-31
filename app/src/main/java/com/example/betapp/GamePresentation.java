@@ -28,7 +28,7 @@ public class GamePresentation extends AppCompatActivity {
             showGameDetails(curr_game);
             final Context context = this;
             LinearLayout layout = (LinearLayout) findViewById(R.id.game_present_layout);
-            if(curr_game.mAvailable_to_bet){
+            if(curr_game.mAvailable_to_bet){ //todo: update the flag
                 Button gamble_btn = new Button(this);
                 gamble_btn.setText(R.string.gamble_now);
                 gamble_btn.setOnClickListener(new View.OnClickListener() {

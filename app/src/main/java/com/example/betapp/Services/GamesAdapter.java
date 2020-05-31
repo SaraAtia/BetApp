@@ -65,11 +65,6 @@ public class GamesAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        /*int id = m_items_arr.get(position).getId();
-        if ( position == id){ //todo:delete
-            System.out.println("Position is ID");
-        }
-        return id;*/
         return position;
     }
 
@@ -162,7 +157,10 @@ public class GamesAdapter extends BaseAdapter{
                         String idEvent = league_gamesJSON.getJSONObject(j).getString("idEvent");
                         String strEvent = league_gamesJSON.getJSONObject(j).getString("strEvent");
                         String dateEvent = league_gamesJSON.getJSONObject(j).getString("dateEvent");
-                        Game g = new Game(groupID, dateEvent, idEvent, strEvent);
+                        String homeTeamID = league_gamesJSON.getJSONObject(j).getString("idHomeTeam");
+                        String awayTeamID = league_gamesJSON.getJSONObject(j).getString("idAwayTeam");
+
+                        Game g = new Game(groupID, dateEvent, idEvent, strEvent, homeTeamID, awayTeamID);
                         String game_entry = Game.uploadToDB(g);
                         games_selected.put(game_entry, g.mGame_name);
                     }

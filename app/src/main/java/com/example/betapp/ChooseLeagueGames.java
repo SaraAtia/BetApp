@@ -56,6 +56,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
         try {
             JSONObject next15Games = HttpService.getInstance().
                     getJSON(Consts.NEXT15EVENTS_BY_LEAGUEID + leagueId);
+
             this.m_events = (JSONArray) next15Games.get("events"); //JSON with 15 next games.
             // create checkbox for each game
             this.m_itemsArr = createCheckboxes(m_events, leagueId);

@@ -1,17 +1,20 @@
 package com.example.betapp.Services;
 
 
-import com.example.betapp.Consts;
+import com.example.betapp.Consts.Error_FLAG;
 import com.example.betapp.Services.HttpService.HttpService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
+
+import static com.example.betapp.Consts.GROUPS_DATABASE;
 //TODO: remove group from database
 
 public class Group {
@@ -49,9 +52,9 @@ public class Group {
 
     /**
      * Pull group from DB by groupID.
-     * @param groupId - string
+     * @param groupId - string or null
      */
-    public static Group getGroup(String groupId){
+   /* public static Group getGroup(String groupId){
         try{
             JSONObject gameJSON = HttpService.getInstance().getJSON(Consts.GROUPS_DATABASE);
             Object group =  gameJSON.get(groupId);
@@ -62,8 +65,56 @@ public class Group {
         }
         //return null; //TODO: pull from DB
 //        return new Group();
-    }
+    }*/
 
+    /**
+     * check if user is
+     * @return
+     */
+   public static Error_FLAG isUserInGroup(String groupID, String userID){
+       try {
+           JSONObject usersJSON = ((JSONObject) HttpService.getInstance().
+                   getJSON(GROUPS_DATABASE).get(groupID));
+           JSONArray usersArray = (JSONArray) usersJSON.get("users");
+           ArrayList<String> users_list = convert_JSONArray_to_ArrayList(usersArray);
+           if(users_list.contains(userID)){
+               return Error_FLAG.ALREADY_IN_GROUP;
+           }
+       } catch (ExecutionException|InterruptedException|JSONException e) {
+           e.printStackTrace();
+           return Error_FLAG.WRONG_CODE;
+       }
+       return Error_FLAG.NO_ERROR;
+   }
+
+
+   private static ArrayList<String> convert_JSONArray_to_ArrayList(JSONArray jsonArray) throws JSONException {
+       ArrayList<String> arrayList = new ArrayList<String>();
+       for(int i = 0; i < jsonArray.length(); i++){
+           arrayList.add(jsonArray.getString(i));
+       }
+       return arrayList;
+   }
+
+
+   public static Error_FLAG addUser(String groupID, String userID){
+        Error_FLAG response = isUserInGroup(groupID, userID);
+        if(response == Error_FLAG.NO_ERROR){
+            FirebaseDatabase DB = FirebaseDatabase.getInstance();
+            JSONArray usersJSON = null;
+            try {
+                usersJSON =(JSONArray)((JSONObject) HttpService.getInstance().getJSON(GROUPS_DATABASE).get(groupID)).get("users");
+                ArrayList<String> users = convert_JSONArray_to_ArrayList(usersJSON);
+                users.add(userID);
+                DB.getReference("groups").child(groupID).child("users").setValue(users);
+                return Error_FLAG.NO_ERROR;
+            } catch (ExecutionException|InterruptedException|JSONException e) {
+                e.printStackTrace();
+                return Error_FLAG.WRONG_CODE;
+            }
+        }
+        return response;
+   }
 
     public static Group createGroupOnDB(){
         FirebaseDatabase DB = FirebaseDatabase.getInstance();

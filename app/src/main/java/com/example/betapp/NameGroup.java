@@ -33,7 +33,7 @@ public class NameGroup extends AppCompatActivity {
         group.setGroupStatus(true);
         group.updateGroupName(group_name);
         group.addUser(MyGroups.mUser.getUserID());
-        MyGroups.mUser.addGroup(group);
+        MyGroups.mUser.addGroup(group.getGroupName(), group.getGroupID());
         Intent intent = new Intent(this, GroupPresentation.class);
         intent.putExtra("group_name", group_name);
         intent.putExtra("groupID", group.getGroupID()); // todo: pass info to game's screen (new screen)

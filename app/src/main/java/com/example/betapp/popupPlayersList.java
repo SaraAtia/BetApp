@@ -6,10 +6,17 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.betapp.Services.HttpService.HttpService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class popupPlayersList extends AppCompatActivity {
     LinearLayout linearLayout;
@@ -23,14 +30,35 @@ public class popupPlayersList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         linearLayout = (LinearLayout)findViewById(R.layout.activity_popup_players_list);
-
         setContentView(R.layout.activity_popup_players_list);
+        try {
+            JSONObject players_away_teamJSON = getPlayersByTeamID(getIntent().getStringExtra("away_teamID"));
+            if (players_away_teamJSON == null){
+                TextView msg = new TextView(this);
+                msg.setLayoutParams(new LinearLayout.LayoutParams
+                        (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                msg.setText("No Players To Present");
+                linearLayout.addView(msg);
+            }
+            JSONObject players_home_teamJSON = getPlayersByTeamID(getIntent().getStringExtra("home_teamID"));
+            if (players_away_teamJSON == null){
+                TextView msg = new TextView(this);
+                msg.setLayoutParams(new LinearLayout.LayoutParams
+                        (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                msg.setText("No Players To Present");
+                linearLayout.addView(msg);
+            }
+        } catch (ExecutionException|InterruptedException|JSONException e) {
+            e.printStackTrace();
+            //TODO: no players to present
+        }
+
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
+        // TODO: get players names - create checkbox for each.
         getWindow().setLayout((int)(width*.8),(int)(height*.75));
         if(!checkBoxes_arr.isEmpty()){
             for(CheckBox c: checkBoxes_arr){
@@ -38,18 +66,13 @@ public class popupPlayersList extends AppCompatActivity {
             }
         }
         else {
-            c1 = (CheckBox)findViewById(R.id.checkbox1);
-            c2 = (CheckBox)findViewById(R.id.checkbox2);
-            c3 = (CheckBox)findViewById(R.id.checkbox3);
-            c4 = (CheckBox)findViewById(R.id.checkbox4);
-            c5 = (CheckBox)findViewById(R.id.checkbox5);
         }
 
 
 
     }
 
-
+/*
     public void addToArrays(CheckBox c){
         players.add(c.getText().toString());
         checkBoxes_arr.add(c);
@@ -90,5 +113,11 @@ public class popupPlayersList extends AppCompatActivity {
                     removeFromArrays(c4);
                 break;
         }
+    }*/
+
+    public JSONObject getPlayersByTeamID(String teamId)throws ExecutionException,
+            InterruptedException, JSONException {
+        return (JSONObject) HttpService.getInstance().
+                getJSON(Consts.PLAYERS_BY_TEAM_ID + teamId).get("player");
     }
 }

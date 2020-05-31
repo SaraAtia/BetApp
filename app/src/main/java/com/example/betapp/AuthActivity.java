@@ -44,7 +44,6 @@ public class AuthActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            System.out.println(currentUser.getUid());
             openMyGroupsActivity(currentUser.getUid());
         }
     }
@@ -108,13 +107,12 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println(user.getUid());
                             openMyGroupsActivity(user.getUid());
                         } else {
                             popupMessage("Credentials incorrect");
                         }
                     }
-                });
+                });//-M8bUY-0h9gqwI6M3FAN
     }
 
     private void createAccount(String email, String password){
@@ -125,7 +123,6 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println(user.getUid());
                             openMyGroupsActivity(user.getUid());
                         } else {
                             popupMessage("Can't create account");

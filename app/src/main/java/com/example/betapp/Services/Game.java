@@ -21,6 +21,7 @@ public class Game {
     public String mDate;
     public String mGameID_API;
     public String mGame_name;
+    public String home_teamID, away_teamID;
     public boolean mAvailable_to_bet;
     public HashMap<String, String> mUsers_bets; //user id, bet id
     private HashMap<String, String> mGame_details; //game info
@@ -47,11 +48,13 @@ public class Game {
         this.mAvailable_to_bet = available_to_bet;
         this.mGame_details = new HashMap<>();
     }
-    public Game(String groupID, String date, String gameID, String gameName) {
+    public Game(String groupID, String date, String gameID, String gameName, String home_teamId, String away_teamId) {
         this.mGroupID = groupID;
         this.mDate = date;
         this.mGameID_API = gameID;
         this.mGame_name = gameName;
+        this.home_teamID = home_teamId;
+        this.away_teamID = away_teamId;
         this.mUsers_bets = new HashMap<>();
         this.mAvailable_to_bet = true;
         this.mGame_details = new HashMap<>();

@@ -38,7 +38,6 @@ public class HttpService {
             try {
                 responseStr = response.body().string();
                 response.body().close();
-                System.out.println(responseStr);
 
             } catch (NullPointerException | IOException e) {
                 e.printStackTrace();

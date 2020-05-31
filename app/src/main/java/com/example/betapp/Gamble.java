@@ -37,6 +37,7 @@ public class Gamble extends AppCompatActivity {
     TextView gameString;
     Button submitButton, scoredForHomeButton, scoredForAwayButton;
     EditText homeScore, awayScore, yellowCards, redCards;
+    String away_teamID, home_teamID;
  //   ArrayList<String> who_scored = new ArrayList<>();
     String gameID;
 
@@ -49,8 +50,11 @@ public class Gamble extends AppCompatActivity {
 
         gameString = (TextView)findViewById(R.id.game_str);
         try {
-            gameString.setText((String)HttpService.getInstance().getJSON(Consts.GAMES_DATABASE)
-                    .getJSONObject(gameID).get("mGame_name"));
+            JSONObject game_details = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE)
+                    .getJSONObject(gameID);
+            this. away_teamID = (String) game_details.get("away_teamID");
+            this. home_teamID = (String) game_details.get("home_teamID");
+            gameString.setText((String)game_details.get("mGame_name"));
         } catch (JSONException|ExecutionException|InterruptedException e) {
             e.printStackTrace();
         }
@@ -64,21 +68,17 @@ public class Gamble extends AppCompatActivity {
     }
 
     public void homeTeamPlayers(View view){
-//        try{
-//            JSONObject home_team_players = getPlayersByTeamID((gamesDetails.get(counter)).get("idHomeTeam"));
-//        }catch (Exception e){
-//            System.out.println("GambleWin line 108"); //TODO: change exception
-//        }
-        startActivity(new Intent(Gamble.this, popupPlayersList.class));
+        Intent intent = new Intent(Gamble.this, popupPlayersList.class);
+        intent.putExtra("away_teamID", this.away_teamID);
+        intent.putExtra("home_teamID", this.home_teamID);
+        startActivity(intent);
     }
 
     public void awayTeamPlayers(View view){
-//        try{
-//            JSONObject home_team_players = getPlayersByTeamID((gamesDetails.get(counter)).get("idAwayTeam"));
-//        }catch (Exception e){
-//            System.out.println("GambleWin line 108"); //TODO: change exception
-//        }
-        startActivity(new Intent(Gamble.this, popupPlayersList.class));
+        Intent intent = new Intent(Gamble.this, popupPlayersList.class);
+        intent.putExtra("away_teamID", this.away_teamID);
+        intent.putExtra("home_teamID", this.home_teamID);
+        startActivity(intent);
     }
 
     public void submitBet(View view){
@@ -103,10 +103,7 @@ public class Gamble extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public JSONObject getPlayersByTeamID(String teamId)throws ExecutionException,
-            InterruptedException, JSONException {
-        return HttpService.getInstance().getJSON(Consts.PLAYERS_BY_TEAM_ID + teamId);
-    }
+
 
 }
 

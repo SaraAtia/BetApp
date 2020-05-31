@@ -22,8 +22,8 @@ public class User {
         return user_ID;
     }
 
-    public void addGroup(Group group) {
-        this.m_groups.put(group.getGroupName(), group.getGroupID());
+    public void addGroup(String groupName, String groupID) {
+        this.m_groups.put(groupName, groupID);
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DB.getReference("users").child(this.user_ID).
                 child("m_groups").setValue(m_groups);
