@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E3B2B2"
-    tools:context=".popupPlayersList">
+    tools:context=".PopupPlayersList">
 
     <TextView
         android:id="@+id/headline"

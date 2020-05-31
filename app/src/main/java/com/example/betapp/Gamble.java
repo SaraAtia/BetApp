@@ -11,28 +11,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.betapp.Services.Bet;
-import com.example.betapp.Services.Game;
 import com.example.betapp.Services.HttpService.HttpService;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class Gamble extends AppCompatActivity {
 
-    ArrayList<String> playersFromPopupWindow = popupPlayersList.players;
-
+    ArrayList<String> playersFromPopupWindow = PopupPlayersList.players;
 
     TextView gameString;
     Button submitButton, scoredForHomeButton, scoredForAwayButton;
@@ -40,7 +31,7 @@ public class Gamble extends AppCompatActivity {
     String away_teamID, home_teamID;
  //   ArrayList<String> who_scored = new ArrayList<>();
     String gameID;
-
+//Todo: not allow submit a bet with an empty field
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,8 +43,8 @@ public class Gamble extends AppCompatActivity {
         try {
             JSONObject game_details = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE)
                     .getJSONObject(gameID);
-            this. away_teamID = (String) game_details.get("away_teamID");
-            this. home_teamID = (String) game_details.get("home_teamID");
+            this.away_teamID = (String) game_details.get("away_teamID");
+            this.home_teamID = (String) game_details.get("home_teamID");
             gameString.setText((String)game_details.get("mGame_name"));
         } catch (JSONException|ExecutionException|InterruptedException e) {
             e.printStackTrace();
@@ -68,14 +59,14 @@ public class Gamble extends AppCompatActivity {
     }
 
     public void homeTeamPlayers(View view){
-        Intent intent = new Intent(Gamble.this, popupPlayersList.class);
+        Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
         intent.putExtra("away_teamID", this.away_teamID);
         intent.putExtra("home_teamID", this.home_teamID);
         startActivity(intent);
     }
 
     public void awayTeamPlayers(View view){
-        Intent intent = new Intent(Gamble.this, popupPlayersList.class);
+        Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
         intent.putExtra("away_teamID", this.away_teamID);
         intent.putExtra("home_teamID", this.home_teamID);
         startActivity(intent);

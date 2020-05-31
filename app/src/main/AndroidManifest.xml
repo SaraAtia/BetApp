@@ -21,7 +21,7 @@
             android:label="My Activity"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name=".popupPlayersList"
+            android:name=".PopupPlayersList"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity android:name=".Gamble" />
         <activity android:name=".ChooseLeagueGames" />
