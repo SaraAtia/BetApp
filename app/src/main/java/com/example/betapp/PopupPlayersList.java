@@ -5,14 +5,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.betapp.Services.HttpService.HttpService;
+import com.example.betapp.Services.PlayersAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +29,8 @@ import java.util.concurrent.ExecutionException;
 
 public class PopupPlayersList extends AppCompatActivity {
     LinearLayout linearLayout;
+    static PlayersAdapter adapter;
+    static ListView listView;
     static ArrayList<String> players = new ArrayList<>();
     static ArrayList<CheckBox> checkBoxes_arr = new ArrayList<>();
     static ArrayList<Integer> d = new ArrayList<>();
@@ -35,48 +41,30 @@ public class PopupPlayersList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        linearLayout = (LinearLayout)findViewById(R.layout.activity_popup_players_list);
         setContentView(R.layout.activity_popup_players_list);
-        //try {
-            JSONArray players_away_teamJSON = getPlayersByTeamID(getIntent().getStringExtra("away_teamID"));
-            if (players_away_teamJSON != null){
-
-
-            } else {
-                TextView msg = new TextView(this);
-                msg.setLayoutParams(new LinearLayout.LayoutParams
-                        (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                msg.setText("No Players To Present");
-                linearLayout.addView(msg);
-            }
-            JSONArray players_home_teamJSON = getPlayersByTeamID(getIntent().getStringExtra("home_teamID"));
-            if (players_away_teamJSON != null){
-
-            } else {
-                TextView msg = new TextView(this);
-                msg.setLayoutParams(new LinearLayout.LayoutParams
-                        (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                msg.setText("No Players To Present");
-                linearLayout.addView(msg);
-            }
-        /*} catch (ExecutionException|InterruptedException|JSONException e) {
-            e.printStackTrace();
-            //TODO: no players to present
-        }*/
-
+        linearLayout = (LinearLayout)findViewById(R.id.popup_linear_layout);
+        listView = (ListView) findViewById(R.id.players_options_layout);
+        if(showPlayersInfo(getIntent().getStringExtra("teamID"))){
+            listView.setAdapter(adapter); // update list of it's adapter
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ((PlayersAdapter) listView.getAdapter()).notifyDataSetChanged();
+                }
+            });
+        } else {
+            TextView msg = new TextView(this);
+            msg.setLayoutParams(new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            msg.setText("No Players To Present");
+            linearLayout.addView(msg);
+        }
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         // TODO: get players names - create checkbox for each.
         getWindow().setLayout((int)(width*.8),(int)(height*.75));
-        if(!checkBoxes_arr.isEmpty()){
-            for(CheckBox c: checkBoxes_arr){
-                c.setChecked(true);
-            }
-        } else {
-
-        }
     }
     /**
      * TODO:fill
@@ -117,7 +105,8 @@ public class PopupPlayersList extends AppCompatActivity {
                         (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 players_view.add(player_view);
             }
-
+            adapter = new PlayersAdapter(this, players_view, teamID);
+            return true;
         } catch (JSONException e) {
             e.printStackTrace();
         }

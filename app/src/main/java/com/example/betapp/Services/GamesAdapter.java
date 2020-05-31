@@ -39,11 +39,9 @@ public class GamesAdapter extends BaseAdapter{
     private String league_id;
     private HashMap<String, Boolean[]> mGames_selected; //league_id:next game and true or false if selected
     private int MAX_GAMES_TO_CHOOSE = 3;
-    private final GamesList m_games_listJSON;
     public GamesAdapter(Context c, ArrayList<Button> items, HashMap<String, Boolean[]> games_selected, String curr_league_id, GamesList gamesList ){
         this.m_context = c;
         this.m_items_arr = items;
-        this.m_games_listJSON = gamesList;
         this.mGames_selected = games_selected;
         this.m_group = CreateGroup.getGroup();
         this.league_id = curr_league_id;

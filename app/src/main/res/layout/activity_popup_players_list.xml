@@ -6,13 +6,31 @@
     android:layout_height="match_parent"
     android:background="#E3B2B2"
     tools:context=".PopupPlayersList">
+    <LinearLayout
+        android:id="@+id/popup_linear_layout"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/headline"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="Choose Players Scoring" />
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Choose Players Scoring" />
+        <ListView
+            android:id="@+id/players_options_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawSelectorOnTop="false"
+            android:visibility="visible"
+            android:layout_marginTop="20dp"
+            />
+    </LinearLayout>
 </RelativeLayout>

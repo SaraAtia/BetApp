@@ -7,8 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import com.example.betapp.CreateGroup;
-import com.example.betapp.GamesList;
+import com.example.betapp.Gamble;
 import com.example.betapp.R;
 
 import java.util.ArrayList;
@@ -18,28 +17,35 @@ import static android.view.View.inflate;
 
 public class PlayersAdapter extends BaseAdapter {
 
-    private final Context m_context;
-    private final ArrayList<CheckBox> m_items_arr;
-    private final HashMap<Integer, Boolean> mPlayers_selected; //position:isChecked
-//    private final HashMap<Object, Object> checked_map;
+    private final Context mContext;
+    private final ArrayList<CheckBox> mPlayers_view;
+    //private final HashMap<String, String> all_players_info; //id_in_api:player_name
+    private final HashMap<Integer, Boolean> mChecked_map; //position:isChecked - contain all players
 
-    public PlayersAdapter(Context c, ArrayList<CheckBox> items, HashMap<Integer, Boolean> games_selected){
-        this.m_context = c;
-        this.m_items_arr = items;
-        this.mPlayers_selected = games_selected;
-       /* this.checked_map = new HashMap<>(checkbox_amount);
-        for(int i = 0; i< checkbox_amount; i++){
-            checked_map.put(i, ((CheckBox)items.get(i)).isChecked());
-        }*/
+    public PlayersAdapter(Context c, ArrayList<CheckBox> items, String teamID){
+        this.mContext = c;
+        this.mPlayers_view = items;
+       //this.all_players_info = players_info;
+        int players_size = mPlayers_view.size();
+
+        if(Gamble.teamPlayersChecked.get(teamID) == null) {
+            this.mChecked_map = new HashMap<>();
+            for (int i = 0; i < players_size; i++) {
+                mChecked_map.put(i, false);
+            }
+            Gamble.teamPlayersChecked.put(teamID, mChecked_map);
+        } else {
+            this.mChecked_map = Gamble.teamPlayersChecked.get(teamID);
+        }
     }
     @Override
     public int getCount() {
-        return m_items_arr.size();
+        return mPlayers_view.size();
     }
 
     @Override
     public Button getItem(int position) {
-        return m_items_arr.get(position);
+        return mPlayers_view.get(position);
     }
 
     @Override
@@ -56,30 +62,23 @@ public class PlayersAdapter extends BaseAdapter {
      * @return item updated with its values and status
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-        Button b;
-       /* if (position < getCount()-1){
-            view = inflate(m_context, R.layout.checkbox_item, null);
-            b = view.findViewById(R.id.checkbox_item);
-            ((CheckBox) b).setChecked(this.checked_map.get(position));
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickCheckbox(v);
-                }});
-        } else {
-            view = inflate(m_context, R.layout.button_item, null);
-            b = view.findViewById(R.id.button_item);
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OnClickSubmit(v);
-                }});
-        }
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        CheckBox b;
+        View view = inflate(mContext, R.layout.checkbox_item, null);
+        b = view.findViewById(R.id.checkbox_item);
+        b.setChecked(this.mChecked_map.get(position));
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((CheckBox)v).isChecked()){
+                    mChecked_map.put(position, true);
+                } else {
+                    mChecked_map.put(position, false);
+                }
+            }
+        });
         b.setText(this.getItem(position).getText());
-        b.setTag(position);
-        this.m_items_arr.get(position).setTag(position);*/
-        return null;
+        b.setTag(this.mPlayers_view.get(position).getTag());
+        return view;
     }
 }

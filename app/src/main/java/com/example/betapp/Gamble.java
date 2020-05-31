@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class Gamble extends AppCompatActivity {
@@ -29,7 +30,8 @@ public class Gamble extends AppCompatActivity {
     Button submitButton, scoredForHomeButton, scoredForAwayButton;
     EditText homeScore, awayScore, yellowCards, redCards;
     String away_teamID, home_teamID;
- //   ArrayList<String> who_scored = new ArrayList<>();
+    public static final HashMap<String, HashMap<Integer, Boolean>> teamPlayersChecked = new HashMap<>(2);
+//    ArrayList<String> who_scored = new ArrayList<>();
     String gameID;
 //Todo: not allow submit a bet with an empty field
     @Override
@@ -38,7 +40,6 @@ public class Gamble extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gamble);
         gameID = getIntent().getStringExtra("gameID");
-
         gameString = (TextView)findViewById(R.id.game_str);
         try {
             JSONObject game_details = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE)
@@ -60,21 +61,24 @@ public class Gamble extends AppCompatActivity {
 
     public void homeTeamPlayers(View view){
         Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
-        intent.putExtra("away_teamID", this.away_teamID);
-        intent.putExtra("home_teamID", this.home_teamID);
+//        intent.putExtra("away_teamID", this.away_teamID);
+        intent.putExtra("teamID", this.home_teamID);
         startActivity(intent);
     }
 
     public void awayTeamPlayers(View view){
         Intent intent = new Intent(Gamble.this, PopupPlayersList.class);
-        intent.putExtra("away_teamID", this.away_teamID);
-        intent.putExtra("home_teamID", this.home_teamID);
+        intent.putExtra("teamID", this.away_teamID);
+//        intent.putExtra("home_teamID", this.home_teamID);
         startActivity(intent);
     }
 
+    public HashMap<String, HashMap<String, String>> getPlayersInfo(){
+        return null;//TODO
+    }
     public void submitBet(View view){
         Bet bet = new Bet(this.homeScore.getText().toString(),this.awayScore.getText().toString(),
-                this.yellowCards.getText().toString(), this.redCards.getText().toString());
+                this.yellowCards.getText().toString(), this.redCards.getText().toString(), getPlayersInfo());
         Bet.uploadToDB(bet);
         String betID = bet.getmBetID();
         String userID = AuthActivity.mUser.user_ID;
