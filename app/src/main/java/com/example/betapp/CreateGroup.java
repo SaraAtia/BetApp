@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 
 public class CreateGroup extends AppCompatActivity {
-    final static HashMap<String, String> btnMap = new HashMap<>();
     Intent m_intent;
     static int count_games = 1;
     static HashMap<String, Boolean[]> chosenGames = new HashMap<>(); // league id: games_selected from next 15
@@ -43,7 +42,6 @@ public class CreateGroup extends AppCompatActivity {
                 temp = line.split(":");
                 league_name = temp[0];
                 league_id = temp[1];
-                btnMap.put(league_id, league_name);
                 final Button btnShow = new Button(this);
                 btnShow.setId(Integer.parseInt(league_id));
                 btnShow.setText(league_name);
@@ -55,7 +53,7 @@ public class CreateGroup extends AppCompatActivity {
                 btnShow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openLeagueGames(btnMap, btnShow);
+                        openLeagueGames(btnShow);
                     }
                 });
                 l.addView(btnShow);
@@ -83,7 +81,7 @@ public class CreateGroup extends AppCompatActivity {
     public static Group getGroup() {
         return m_my_group;
     }
-    public void openLeagueGames(HashMap<String, String> btnMap, Button btnShow){
+    private void openLeagueGames(Button btnShow){
         if(m_intent == null) {
             m_intent = new Intent(this, ChooseLeagueGames.class);
         }
