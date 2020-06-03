@@ -35,7 +35,7 @@ public class GeneralRankingTable extends AppCompatActivity {
 
     private void readDataFromDB(){
         try {
-            JSONObject game_info = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).
+            JSONObject game_info = HttpService.getInstance().getJSON(Consts.GROUPS_DATABASE).
                     getJSONObject(mGroupID);
             JSONObject users_info = HttpService.getInstance().getJSON(Consts.USERS_DATABASE);
             JSONArray ranking_info = game_info.getJSONArray("ranking_table");
