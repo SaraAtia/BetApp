@@ -13,20 +13,10 @@ import android.widget.ListView;
 import com.example.betapp.Services.GamesAdapter;
 import com.example.betapp.Services.HttpService.HttpService;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import okhttp3.Response;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-
-import static com.example.betapp.Consts.MAX_GAMES_TO_BET;
-
 
 /**
  * Choose league games activity present 15 closest games of league chosen and let
@@ -81,7 +71,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
      * @param leagueId string id present the league in DB
      * @return array of all checkboxes created
      */
-    public ArrayList<Button> createCheckboxes(JSONArray events, String leagueId) {
+    private ArrayList<Button> createCheckboxes(JSONArray events, String leagueId) {
         boolean has_status = false;
         Boolean[] status = null;
         try {
@@ -118,7 +108,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
     /**
      * create a submit btn and set its value
      */
-    public void createSubmitBtn() {
+    private void createSubmitBtn() {
         Button submit_btn = new Button(this);
         submit_btn.setId(this.m_itemsArr.size());
         submit_btn.setLayoutParams(new ListView.LayoutParams
@@ -133,7 +123,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
      *      {leagueID:boolean array of game's status(True for game selected)}
      * @param savedInstanceState
      */
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.

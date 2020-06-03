@@ -76,10 +76,10 @@ public class Gamble extends AppCompatActivity {
     }
 
     /**
-     * create a map containing all info of players selected from each team
-     * @return
+     * Create a map containing all info of players selected from each team
+     * @return map with players selected info {player_name:player_id}
      */
-    public HashMap<String, String> getSelectedPlayers(String teamID){
+    private HashMap<String, String> getSelectedPlayers(String teamID){
         HashMap<String, String> players_selected = new HashMap<>();
         HashMap<Integer, Boolean> players_by_teamID= this.teamPlayersChecked.get(teamID);
         ArrayList<CheckBox> players_info_by_teamID = players_view_by_teamID.get(teamID);
@@ -91,6 +91,11 @@ public class Gamble extends AppCompatActivity {
         }
         return players_selected;
     }
+
+    /**
+     * Save bet info and upload to DB.
+     * @param view submit btn
+     */
     public void submitBet(View view){
         Bet bet = new Bet(this.homeScore.getText().toString(),this.awayScore.getText().toString(),
                 this.yellowCards.getText().toString(), this.redCards.getText().toString(),

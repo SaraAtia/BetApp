@@ -66,7 +66,7 @@ public class AllGamesPresentation extends AppCompatActivity {
      * Open game presentation of game btn clicked.
      * @param gameID
      */
-     public void openGamePresentation(String gameID){
+     private void openGamePresentation(String gameID){
          Intent intent = new Intent(this, GamePresentation.class);
          intent.putExtra("gameID", gameID);
          startActivity(intent);
