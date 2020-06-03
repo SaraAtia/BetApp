@@ -32,10 +32,6 @@ public class PopupPlayersList extends AppCompatActivity {
     static PlayersAdapter adapter;
     static ListView listView;
     static ArrayList<String> players = new ArrayList<>();
-    static ArrayList<CheckBox> checkBoxes_arr = new ArrayList<>();
-    static ArrayList<Integer> d = new ArrayList<>();
-    CheckBox c1, c2, c3, c4, c5;
-
 
     @SuppressLint("ResourceType")
     @Override
@@ -66,10 +62,11 @@ public class PopupPlayersList extends AppCompatActivity {
         // TODO: get players names - create checkbox for each.
         getWindow().setLayout((int)(width*.8),(int)(height*.75));
     }
+
     /**
-     * TODO:fill
-     * @param teamId
-     * @return
+     * Get JSON of all players of specified team.
+     * @param teamId - id of specified team
+     * @return JSON of all players
      */
     public static JSONArray getPlayersByTeamID(String teamId) {
         try {
@@ -81,6 +78,12 @@ public class PopupPlayersList extends AppCompatActivity {
         }
     }
 
+    /**
+     * Extract from JSON map of players. Each player has name(=String), id(=String).
+     * @param playersJSON
+     * @return players {player_name:player_id}
+     * @throws JSONException
+     */
     private static HashMap<String, String> getPlayersByJSON(JSONArray playersJSON) throws JSONException {
         HashMap<String, String> players_id_name = new HashMap<>();
         for(int i=0; i <playersJSON.length(); i++){
@@ -91,6 +94,11 @@ public class PopupPlayersList extends AppCompatActivity {
         return players_id_name;
     }
 
+    /**
+     * get all players names and ids and create a checkbox for each player.
+     * @param teamID
+     * @return if created checkbox successfully - true, else false.
+     */
     private boolean showPlayersInfo(String teamID){
         JSONArray playersJSON = getPlayersByTeamID(teamID);
         ArrayList<CheckBox> players_view = new ArrayList<>();

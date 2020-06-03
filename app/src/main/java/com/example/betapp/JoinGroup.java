@@ -28,6 +28,11 @@ public class JoinGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group);
     }
+
+    /**
+     * On clicking OK button join user to proper group by code == groupID and add user to group.
+     * @param view OK button
+     */
     public void enterCode(View view) {
         EditText text_code = (EditText) findViewById(R.id.code);
         String code = text_code.getText().toString(); // code = groupID
@@ -52,7 +57,5 @@ public class JoinGroup extends AppCompatActivity {
                 Toast.makeText(this, "Already in Group", Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 }

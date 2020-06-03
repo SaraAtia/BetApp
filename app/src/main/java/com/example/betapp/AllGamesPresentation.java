@@ -29,6 +29,10 @@ public class AllGamesPresentation extends AppCompatActivity {
         final Context context = this;
         DatabaseReference groups_DB = FirebaseDatabase.getInstance().getReference("groups");
         groups_DB.addValueEventListener(new ValueEventListener(){
+            /**
+             * show all games in group - each game presented as button.
+             * @param dataSnapshot DB data
+             */
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Group curr_group = dataSnapshot.child(groupID).getValue(Group.class);
@@ -57,6 +61,11 @@ public class AllGamesPresentation extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Open game presentation of game btn clicked.
+     * @param gameID
+     */
      public void openGamePresentation(String gameID){
          Intent intent = new Intent(this, GamePresentation.class);
          intent.putExtra("gameID", gameID);

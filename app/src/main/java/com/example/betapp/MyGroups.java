@@ -30,8 +30,6 @@ import java.util.HashMap;
 public class MyGroups extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private ArrayList<Group> user_groups;
-    public final ArrayList<User> users = new ArrayList<>();
     public String mUserID;
     public static User mUser;
 
@@ -69,7 +67,8 @@ public class MyGroups extends AppCompatActivity {
                                     Button btnShow = new Button(context);
                                     btnShow.setText((String) groups_names[i]);
                                     btnShow.setLayoutParams(new LinearLayout.LayoutParams
-                                            (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                                            (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
+                                                    LayoutParams.WRAP_CONTENT));
                                     btnShow.setTag((String) groups_ids[i]);
                                     btnShow.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -95,7 +94,7 @@ public class MyGroups extends AppCompatActivity {
         //this.startService(); // TODO: uncomment to start notification service
     }
 
-    public void openGroup(String groupID){
+    private void openGroup(String groupID){
         Intent intent = new Intent(this, GroupPresentation.class);
         intent.putExtra("groupID", groupID);
         startActivity(intent);

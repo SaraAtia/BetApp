@@ -22,9 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class GamePresentation extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class GamePresentation extends AppCompatActivity {
             game_name_view.setText(curr_game.mGame_name);
             ((TextView)findViewById(R.id.game_date)).setText(curr_game.mDate);
             try {
-                long millis=System.currentTimeMillis();
+                long millis = System.currentTimeMillis();
                 java.sql.Date date=new java.sql.Date(millis);
                 Date game_date = new SimpleDateFormat("yyyy-MM-dd").parse(curr_game.mDate);
                 Date curr_date = new SimpleDateFormat("yyyy-MM-dd").parse(date.toString());
@@ -82,6 +80,11 @@ public class GamePresentation extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Present all info of specified game
+     * @param game_id_api - specified game id
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showEventResult(String game_id_api){
         try {
@@ -107,8 +110,6 @@ public class GamePresentation extends AppCompatActivity {
             createTextView("Away Team Yellow Cards: ", away_yellow_card, true);
             createTextView("Home Team Players Scored: ", home_players_scored_str, false);
             createTextView("Away Team Players Scored: ", away_players_scored_str, false);
-
-
         } catch (JSONException|InterruptedException|ExecutionException e) {
             e.printStackTrace();
         }
@@ -130,6 +131,12 @@ public class GamePresentation extends AppCompatActivity {
 
     }
 
+    /**
+     * Extract from JSON of players who scored - players name as array.
+     * @param players_scoredJSON
+     * @return array list of all players who scored
+     * @throws JSONException
+     */
     private ArrayList<String> getPlayersScored(JSONObject players_scoredJSON) throws JSONException {
         ArrayList<String> players_scored = new ArrayList<>();
         for (Iterator<String> it = players_scoredJSON.keys(); it.hasNext(); ) {

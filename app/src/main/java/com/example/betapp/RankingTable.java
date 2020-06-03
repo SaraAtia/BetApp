@@ -37,6 +37,9 @@ public class RankingTable extends AppCompatActivity {
         readDataFromDB();
     }
 
+    /**
+     * Get info from DB for filling ranking table.
+     */
     private void readDataFromDB(){
         try {
             JSONObject game_info = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).
@@ -68,13 +71,21 @@ public class RankingTable extends AppCompatActivity {
 
     }
 
+    /**
+     * Create a row in ranking table.
+     * @param rank
+     * @param userName
+     * @param score
+     * @param scoringPlayers
+     * @param yellowCards
+     * @param redCards
+     */
     private void createRow (String rank, String userName, String score, String scoringPlayers,
                             String yellowCards, String redCards){
         TableRow tr = new TableRow(this);
         tr.setBackgroundColor(Color.parseColor("#000000"));
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 0, 1));
-
 
         TextView rankView = createTextView(this, rank, 0);
         TextView userNameView = createTextView(this, userName, 1);
@@ -111,5 +122,4 @@ public class RankingTable extends AppCompatActivity {
         tv.setLayoutParams(tvParams);
         return tv;
     }
-
 }

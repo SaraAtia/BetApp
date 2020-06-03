@@ -34,7 +34,6 @@ import static com.example.betapp.Consts.MAX_GAMES_TO_BET;
  * Those are the games which group will bet on.
  */
 public class ChooseLeagueGames extends AppCompatActivity {
-    private final GamesList m_gamesListJSON = new GamesList(MAX_GAMES_TO_BET);
     private ArrayList<Button> m_itemsArr;
     private JSONArray m_events;
     private ListView list;
@@ -66,7 +65,7 @@ public class ChooseLeagueGames extends AppCompatActivity {
         }
         createSubmitBtn();
         // adapter contains all buttons to be presented in scrolled list
-        GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, CreateGroup.chosenGames, leagueId, m_gamesListJSON);
+        GamesAdapter gamesAdapter = new GamesAdapter(this, m_itemsArr, CreateGroup.chosenGames, leagueId);
         list.setAdapter(gamesAdapter); // update list of it's adapter
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -25,7 +25,6 @@ public class GeneralRankingTable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_ranking_table);
-        TableLayout ranking_table = (TableLayout) findViewById(R.id.general_ranking_table);
         mGroupID = getIntent().getStringExtra("groupID");
         mRanking_table = findViewById(R.id.general_ranking_table);
         mRanking_table.setStretchAllColumns(true);
@@ -33,6 +32,9 @@ public class GeneralRankingTable extends AppCompatActivity {
         readDataFromDB();
     }
 
+    /**
+     * Get info from DB for filling ranking table.
+     */
     private void readDataFromDB(){
         try {
             JSONObject game_info = HttpService.getInstance().getJSON(Consts.GROUPS_DATABASE).
@@ -44,21 +46,23 @@ public class GeneralRankingTable extends AppCompatActivity {
                 JSONObject user_rank = ranking_info.getJSONObject(i);
                 String userID = user_rank.keys().next();
                 String user_name = users_info.getJSONObject(userID).getString("user_name");
-
                 createRow(String.valueOf(i), user_name);
             }
         } catch (JSONException | ExecutionException |InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Create a row in ranking table.
+     * @param rank
+     * @param userName
+     */
     private void createRow (String rank, String userName){
         TableRow tr = new TableRow(this);
         tr.setBackgroundColor(Color.parseColor("#000000"));
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 0, 1));
-
 
         TextView rankView = RankingTable.createTextView(this, rank, 0);
         TextView userNameView = RankingTable.createTextView(this, userName, 1);

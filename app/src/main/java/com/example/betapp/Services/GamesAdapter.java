@@ -12,18 +12,15 @@ import android.widget.Toast;
 
 import com.example.betapp.Consts;
 import com.example.betapp.CreateGroup;
-import com.example.betapp.GamesList;
 import com.example.betapp.NameGroup;
 import com.example.betapp.R;
 import com.example.betapp.Services.HttpService.HttpService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutionException;
 
 import static android.view.View.inflate;
@@ -39,7 +36,7 @@ public class GamesAdapter extends BaseAdapter{
     private String league_id;
     private HashMap<String, Boolean[]> mGames_selected; //league_id:next game and true or false if selected
     private int MAX_GAMES_TO_CHOOSE = 3;
-    public GamesAdapter(Context c, ArrayList<Button> items, HashMap<String, Boolean[]> games_selected, String curr_league_id, GamesList gamesList ){
+    public GamesAdapter(Context c, ArrayList<Button> items, HashMap<String, Boolean[]> games_selected, String curr_league_id){
         this.m_context = c;
         this.m_items_arr = items;
         this.mGames_selected = games_selected;
