@@ -27,7 +27,7 @@ public class GeneralRankingTable extends AppCompatActivity {
         setContentView(R.layout.activity_general_ranking_table);
         TableLayout ranking_table = (TableLayout) findViewById(R.id.general_ranking_table);
         mGroupID = getIntent().getStringExtra("groupID");
-        mRanking_table = findViewById(R.id.ranking_table);
+        mRanking_table = findViewById(R.id.general_ranking_table);
         mRanking_table.setStretchAllColumns(true);
         mRanking_table.bringToFront();
         readDataFromDB();
