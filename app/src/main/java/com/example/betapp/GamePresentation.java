@@ -34,7 +34,7 @@ public class GamePresentation extends AppCompatActivity {
                 gamble_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, Gamble.class);
+                        Intent intent = new Intent(context, RankingTable.class);//TODO: change to gamble
                         intent.putExtra("gameID", curr_game.mGameID);
                         startActivity(intent);
                     }
@@ -48,6 +48,7 @@ public class GamePresentation extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, RankingTable.class);
+                        intent.putExtra("gameID", curr_game.mGameID);
                         startActivity(intent);
                     }
                 });

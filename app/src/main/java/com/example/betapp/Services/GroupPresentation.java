@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.betapp.AllGamesPresentation;
+import com.example.betapp.GeneralRankingTable;
 import com.example.betapp.R;
 import com.example.betapp.RankingTable;
 
@@ -23,7 +24,8 @@ public class GroupPresentation extends AppCompatActivity {
     }
 
     public void openRankTable(View view){
-        Intent intent = new Intent(this, RankingTable.class);
+        Intent intent = new Intent(this, GeneralRankingTable.class);
+        intent.putExtra("groupID", this.code);
         startActivity(intent);
     }
 

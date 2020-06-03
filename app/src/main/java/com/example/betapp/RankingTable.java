@@ -2,6 +2,7 @@ package com.example.betapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -11,121 +12,106 @@ import android.widget.TextView;
 
 import com.example.betapp.Services.Bet;
 import com.example.betapp.Services.Group;
-//import com.example.betapp.Services.UserBets;
+import com.example.betapp.Services.HttpService.HttpService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class RankingTable extends AppCompatActivity {
-    private Group group;
-    private LinkedHashMap<String, Float> finalRank;
+    private TableLayout mRanking_table;
+    private String mGameID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking_table);
-        TableLayout victory_table = (TableLayout)findViewById(R.id.victory_table);
-//        victory_table.setStretchAllColumns(true);
-//        victory_table.bringToFront();
-//
-//
-//        //user1
-//        LinkedList<String> bet1_home_match_1_players = new LinkedList<>();
-//        bet1_home_match_1_players.add("david");
-//        bet1_home_match_1_players.add("eli");
-//        bet1_home_match_1_players.add("eli");
-//
-//
-//        LinkedList<String> bet1_home_match_2_players = new LinkedList<>();
-//
-//        Bet bet1a = new Bet("a vs b", 3, 2, bet1_home_match_1_players,
-//                2, 0);
-//
-//        UserBets userBets1 = new UserBets("user 1");
-//        userBets1.addBetToList(bet1a);
-//
-//        //user2
-//        LinkedList<String> bet2_home_match_1_players = new LinkedList<>();
-//        bet2_home_match_1_players.add("eden");
-//        bet2_home_match_1_players.add("dekel");
-//
-//
-//        Bet bet1b = new Bet("a vs b", 3, 0, bet2_home_match_1_players,
-//                3, 1);
-//
-//        UserBets userBets2 = new UserBets("user 2");
-//        userBets2.addBetToList(bet1b);
-//
-//
-//        userBets1.addPointsToUserProfile(150);
-//        userBets2.addPointsToUserProfile(120);
-//
-//        group = new Group(123);
-//        group.addUserToGroup(userBets1);
-//        group.addUserToGroup(userBets2);
-//
-//        finalRank = new LinkedHashMap<>();
-//
-//        finalRank.put(userBets1.getId(),userBets1.getUserScore());
-//        finalRank.put(userBets2.getId(),userBets2.getUserScore());
-//
-//
-//
-//        int i = 1;
-//        for(int j = 0; j < 40; j++) {
-//            for (String s : finalRank.keySet()) {
-//                TableRow tr = new TableRow(this);
-//                tr.setBackgroundColor(Color.parseColor("#000000"));
-//                tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-//                        0, 1));
-//
-//                UserBets userBets = group.getUserByID(s);
-//                Bet bet = userBets.getBetByMatchName("a vs b");
-//
-//                TextView rank = createTextView(String.valueOf(i++), 0);
-//                TextView userName = createTextView(s, 1);
-//                TextView matchScore = createTextView(bet.getHomeTeamScore() + " - " + bet.getAwayTeamScore(), 2);
-//                TextView scoringPlayers = createTextView(bet.scoringPlayersToString(), 3);
-//                TextView yellowCards = createTextView(String.valueOf(bet.getNumOYellowCards()), 4);
-//                TextView redCards = createTextView(String.valueOf(bet.getNumOfRedCards()), 5);
-//
-//                tr.addView(rank);
-//                tr.addView(userName);
-//                tr.addView(matchScore);
-//                tr.addView(scoringPlayers);
-//                tr.addView(yellowCards);
-//                tr.addView(redCards);
-//
-//                victory_table.addView(tr);
-//            }
-//        }
+        mGameID = getIntent().getStringExtra("gameID");
+        mRanking_table = findViewById(R.id.ranking_table);
+        mRanking_table.setStretchAllColumns(true);
+        mRanking_table.bringToFront();
+        readDataFromDB();
+    }
+
+    private void readDataFromDB(){
+        try {
+            JSONObject game_info = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).
+                    getJSONObject(mGameID);
+            JSONObject users_info = HttpService.getInstance().getJSON(Consts.USERS_DATABASE);
+            JSONObject bets_info = HttpService.getInstance().getJSON(Consts.BETS_DATABASE);
+            JSONArray ranking_info = game_info.getJSONArray("ranking_table");
+            int info_len = ranking_info.length();
+            for (int i = 1; i <= info_len; i++) {
+                JSONObject user_rank = ranking_info.getJSONObject(i);
+                String userID = user_rank.keys().next();
+                String user_score = user_rank.getString(userID);
+                String user_name = users_info.getJSONObject(userID).getString("user_name");
+                String betID = game_info.getJSONObject("mUsers_bets").getString(userID);
+                Bet bet = new Bet(bets_info.getJSONObject(betID));
+                Collection<String> players_scored_collection = new ArrayList<>(bet.mHome_team_players_scored.values());
+                Collection<String> away_players_scored_collection = bet.mAway_team_players_scored.values();
+                players_scored_collection.addAll(away_players_scored_collection);
+                StringBuilder players_scored = new StringBuilder();
+                for (Iterator player = players_scored_collection.iterator(); player.hasNext(); ) {
+                    players_scored.append(player.next()); //Todo: delete last ,
+                }
+                createRow(String.valueOf(i), user_name, user_score, players_scored.toString(),
+                        bet.mNum_of_yellow_cards, bet.mNum_of_red_cards);
+            }
+        } catch (JSONException|ExecutionException|InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public TextView createTextView(String text, int columnText){
-        final TextView tv = new TextView(this);
+    private void createRow (String rank, String userName, String score, String scoringPlayers,
+                            String yellowCards, String redCards){
+        TableRow tr = new TableRow(this);
+        tr.setBackgroundColor(Color.parseColor("#000000"));
+        tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                0, 1));
+
+
+        TextView rankView = createTextView(this, rank, 0);
+        TextView userNameView = createTextView(this, userName, 1);
+        TextView scoreView = createTextView(this, score, 2);
+        TextView scoringPlayersView = createTextView(this, scoringPlayers, 3);
+        TextView yellowCardsView = createTextView(this, yellowCards, 4);
+        TextView redCardsView = createTextView(this, redCards, 5);
+
+        tr.addView(rankView);
+        tr.addView(userNameView);
+        tr.addView(scoreView);
+        tr.addView(scoringPlayersView);
+        tr.addView(yellowCardsView);
+        tr.addView(redCardsView);
+
+        mRanking_table.addView(tr);
+    }
+
+    public static TextView createTextView(Context c, String text, int columnText) {
+        final TextView tv = new TextView(c);
         tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.MATCH_PARENT));
         tv.setLayoutParams(new TableRow.LayoutParams(columnText));
         tv.setBackgroundColor(Color.parseColor("#FFFFFF"));
         tv.setGravity(Gravity.CENTER);
-        tv.setTextAppearance(this, android.R.style.TextAppearance_Large);
+        tv.setTextAppearance(c, android.R.style.TextAppearance_Large);
         tv.setText(text);
         tv.setTextSize(17);
         TableRow.LayoutParams tvParams = new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT
         );
-        tvParams.setMargins(1, 1, 1 , 1);
+        tvParams.setMargins(1, 1, 1, 1);
         tv.setLayoutParams(tvParams);
         return tv;
     }
 
-//    public LinkedHashMap<String, Float> sortMap(LinkedHashMap<String, Float> unsortedMap){
-//        LinkedHashMap<String, Float> sortedMap = new LinkedHashMap<>();
-//        unsortedMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).
-//                forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
-//        return sortedMap;
-//    }
 }
