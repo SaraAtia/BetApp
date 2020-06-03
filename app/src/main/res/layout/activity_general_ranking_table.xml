@@ -63,18 +63,6 @@
                         android:textStyle="bold"
                         />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text=" Score "
-                        android:textSize="17sp"
-                        android:layout_margin="1dp"
-                        android:layout_column="2"
-                        android:background="#FFFFFF"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        />
                 </TableRow>
             </TableLayout>
         </ScrollView>

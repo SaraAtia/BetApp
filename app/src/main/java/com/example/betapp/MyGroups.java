@@ -53,7 +53,7 @@ public class MyGroups extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    mUserID = ds.child(userIDAuth).getValue(String.class);
+                    mUserID = ds.child(userIDAuth).getValue(String.class); //TODO: if null - create a new user on db
                     // get the map between user id in authentication to user entry in user's database
                     DatabaseReference users_DB = database.getReference("users");
                     users_DB.addValueEventListener(new ValueEventListener(){

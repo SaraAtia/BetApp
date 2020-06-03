@@ -11,7 +11,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.betapp.Services.Bet;
-import com.example.betapp.Services.Group;
 import com.example.betapp.Services.HttpService.HttpService;
 
 import org.json.JSONArray;
@@ -21,7 +20,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutionException;
 
 public class RankingTable extends AppCompatActivity {
@@ -50,18 +48,18 @@ public class RankingTable extends AppCompatActivity {
             for (int i = 1; i <= info_len; i++) {
                 JSONObject user_rank = ranking_info.getJSONObject(i);
                 String userID = user_rank.keys().next();
-                String user_score = user_rank.getString(userID);
                 String user_name = users_info.getJSONObject(userID).getString("user_name");
                 String betID = game_info.getJSONObject("mUsers_bets").getString(userID);
                 Bet bet = new Bet(bets_info.getJSONObject(betID));
+                String game_score = bet.mHome_team_score + "-" + bet.mAway_team_score;
                 Collection<String> players_scored_collection = new ArrayList<>(bet.mHome_team_players_scored.values());
                 Collection<String> away_players_scored_collection = bet.mAway_team_players_scored.values();
                 players_scored_collection.addAll(away_players_scored_collection);
                 StringBuilder players_scored = new StringBuilder();
                 for (Iterator player = players_scored_collection.iterator(); player.hasNext(); ) {
-                    players_scored.append(player.next()); //Todo: delete last ,
+                    players_scored.append(player.next()).append(","); //Todo: delete last ,
                 }
-                createRow(String.valueOf(i), user_name, user_score, players_scored.toString(),
+                createRow(String.valueOf(i), user_name, game_score, players_scored.toString(),
                         bet.mNum_of_yellow_cards, bet.mNum_of_red_cards);
             }
         } catch (JSONException|ExecutionException|InterruptedException e) {

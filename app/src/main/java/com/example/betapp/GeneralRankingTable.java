@@ -43,10 +43,9 @@ public class GeneralRankingTable extends AppCompatActivity {
             for (int i = 1; i <= info_len; i++) {
                 JSONObject user_rank = ranking_info.getJSONObject(i);
                 String userID = user_rank.keys().next();
-                String user_score = user_rank.getString(userID);
                 String user_name = users_info.getJSONObject(userID).getString("user_name");
 
-                createRow(String.valueOf(i), user_name, user_score);
+                createRow(String.valueOf(i), user_name);
             }
         } catch (JSONException | ExecutionException |InterruptedException e) {
             e.printStackTrace();
@@ -54,7 +53,7 @@ public class GeneralRankingTable extends AppCompatActivity {
 
     }
 
-    private void createRow (String rank, String userName, String score){
+    private void createRow (String rank, String userName){
         TableRow tr = new TableRow(this);
         tr.setBackgroundColor(Color.parseColor("#000000"));
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
@@ -63,11 +62,9 @@ public class GeneralRankingTable extends AppCompatActivity {
 
         TextView rankView = RankingTable.createTextView(this, rank, 0);
         TextView userNameView = RankingTable.createTextView(this, userName, 1);
-        TextView scoreView = RankingTable.createTextView(this, score, 2);
 
         tr.addView(rankView);
         tr.addView(userNameView);
-        tr.addView(scoreView);
 
         mRanking_table.addView(tr);
     }
