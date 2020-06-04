@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E4D2F1"
+    android:background="@drawable/soccer_background_4"
     tools:context=".Gamble">
 
 
@@ -14,29 +14,30 @@
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
        android:layout_centerInParent="true"
-       android:layout_marginTop="40dp"
-       android:textSize="25sp" />
+       android:layout_marginTop="55dp"
+       android:textSize="25sp"
+       android:textColor="#FFFFFF"/>
 
-
-   <EditText
-       android:id="@+id/score_home_team_bet"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:gravity="center"
-       android:layout_marginLeft="80dp"
-       android:layout_marginTop="200dp"
-       android:hint="Home team"
-       android:inputType="numberDecimal"
-       android:textSize="20sp" />
 
    <EditText
        android:id="@+id/score_away_team_bet"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:gravity="center"
        android:layout_marginLeft="240dp"
        android:layout_marginTop="200dp"
+       android:gravity="center"
        android:hint="Away team"
+       android:inputType="numberDecimal"
+       android:textSize="20sp" />
+
+   <EditText
+       android:id="@+id/score_home_team_bet"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="80dp"
+       android:layout_marginTop="200dp"
+       android:gravity="center"
+       android:hint="Home team"
        android:inputType="numberDecimal"
        android:textSize="20sp" />
 
@@ -60,33 +61,16 @@
        android:text="scored for away team"
        android:textSize="12sp" />
 
-   <TextView
-       android:id="@+id/yellow_cards"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginLeft="40dp"
-       android:layout_marginTop="430dp"
-       android:text="Number of yellow cards:"
-       android:textSize="20sp" />
 
    <EditText
        android:id="@+id/yellow_cards_bet"
        android:layout_width="70dp"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="270dp"
+       android:layout_marginLeft="118dp"
        android:layout_marginTop="420dp"
        android:gravity="center"
        android:hint="yellow"
        android:inputType="numberDecimal"
-       android:textSize="20sp" />
-
-   <TextView
-       android:id="@+id/red_cards"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginLeft="55dp"
-       android:layout_marginTop="520dp"
-       android:text="Number of red cards:"
        android:textSize="20sp" />
 
    <EditText
@@ -94,7 +78,7 @@
        android:layout_width="70dp"
        android:layout_height="wrap_content"
        android:layout_marginLeft="260dp"
-       android:layout_marginTop="510dp"
+       android:layout_marginTop="420dp"
        android:gravity="center"
        android:hint="red"
        android:inputType="numberDecimal"
@@ -109,5 +93,21 @@
        android:onClick="submitBet"
        android:text="@string/submit"
        android:textSize="12sp" />
+
+   <ImageView
+       android:id="@+id/imageView"
+       android:layout_width="65dp"
+       android:layout_height="75dp"
+       android:layout_marginLeft="75dp"
+       android:layout_marginTop="400dp"
+       app:srcCompat="@drawable/yellow_card" />
+
+   <ImageView
+       android:id="@+id/imageView"
+       android:layout_width="58dp"
+       android:layout_height="68dp"
+       android:layout_marginLeft="220dp"
+       android:layout_marginTop="405dp"
+       app:srcCompat="@drawable/red_card" />
 
 </RelativeLayout>

@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/soccer_background_1"
+    android:background="@drawable/soccer_background_3"
     tools:context=".AuthActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView"
-        android:layout_width="383dp"
-        android:layout_height="128dp"
+        android:layout_width="382dp"
+        android:layout_height="117dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,7 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter email address"
+        android:gravity="center"
+        android:hint="Email Address"
         android:inputType="textEmailAddress"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
@@ -38,7 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Enter password"
+        android:gravity="center"
+        android:hint="Password"
         android:inputType="textPassword"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
