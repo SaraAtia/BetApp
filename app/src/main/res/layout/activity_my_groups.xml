@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/soccer_background_2"
     tools:context=".MyGroups">
 
     <LinearLayout
@@ -14,12 +15,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/my_groups"
+            android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
         <LinearLayout
@@ -31,24 +34,27 @@
             <Button
                 android:id="@+id/createLeague"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:onClick="createGroup"
-                android:text="@string/create_group" />
+                android:text="@string/create_group"
+                android:textColor="#8BC34A" />
+
             <Button
                 android:id="@+id/joinLeague"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:onClick="joinGroup"
-                android:text="@string/join_group" />
+                android:text="@string/join_group"
+                android:textColor="#8BC34A" />
         </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="548dp">
+            android:layout_height="549dp">
 
             <LinearLayout
                 android:id="@+id/my_groups_layout"
@@ -57,16 +63,17 @@
                 android:orientation="vertical"></LinearLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/signout_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:onClick="signOut"
-            android:text="Signout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+
     </LinearLayout>
+
+<!--    <Button-->
+<!--        android:id="@+id/signout_btn"-->
+<!--        android:layout_width="37dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:background="#FFFFFF"-->
+<!--        android:foreground="@drawable/signout"-->
+<!--        android:onClick="signOut"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
