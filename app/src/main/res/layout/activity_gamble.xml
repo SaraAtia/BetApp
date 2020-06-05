@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/soccer_background_4"
@@ -12,102 +13,148 @@
        android:id="@+id/game_str"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_centerInParent="true"
-       android:layout_marginTop="55dp"
+       android:textColor="#FFFFFF"
        android:textSize="25sp"
-       android:textColor="#FFFFFF"/>
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.498"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.286" />
 
 
    <EditText
        android:id="@+id/score_away_team_bet"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="240dp"
-       android:layout_marginTop="200dp"
        android:gravity="center"
-       android:hint="Away team"
+       android:hint="Away team score"
        android:inputType="numberDecimal"
-       android:textSize="20sp" />
+       android:textColor="#FFFFFF"
+       android:textColorHint="#FFFFFF"
+       android:textSize="20sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.883"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.37" />
 
    <EditText
        android:id="@+id/score_home_team_bet"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="80dp"
-       android:layout_marginTop="200dp"
        android:gravity="center"
-       android:hint="Home team"
+       android:hint="Home team score"
        android:inputType="numberDecimal"
-       android:textSize="20sp" />
+       android:textColor="#FFFFFF"
+       android:textColorHint="#FFFFFF"
+       android:textSize="20sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.127"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.37" />
 
    <Button
        android:id="@+id/scored_for_home_team"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="27dp"
-       android:layout_marginTop="300dp"
        android:onClick="homeTeamPlayers"
        android:text="scored for home team"
-       android:textSize="12sp" />
+       android:textSize="12sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.128"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.484" />
 
    <Button
        android:id="@+id/scored_for_away_team"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="220dp"
-       android:layout_marginTop="300dp"
        android:onClick="awayTeamPlayers"
        android:text="scored for away team"
-       android:textSize="12sp" />
-
-
-   <EditText
-       android:id="@+id/yellow_cards_bet"
-       android:layout_width="70dp"
-       android:layout_height="wrap_content"
-       android:layout_marginLeft="118dp"
-       android:layout_marginTop="420dp"
-       android:gravity="center"
-       android:hint="yellow"
-       android:inputType="numberDecimal"
-       android:textSize="20sp" />
-
-   <EditText
-       android:id="@+id/red_cards_bet"
-       android:layout_width="70dp"
-       android:layout_height="wrap_content"
-       android:layout_marginLeft="260dp"
-       android:layout_marginTop="420dp"
-       android:gravity="center"
-       android:hint="red"
-       android:inputType="numberDecimal"
-       android:textSize="20sp" />
+       android:textSize="12sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.881"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.484" />
 
    <Button
        android:id="@+id/submit_btn"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_alignParentRight="true"
-       android:layout_alignParentBottom="true"
        android:onClick="submitBet"
        android:text="@string/submit"
-       android:textSize="12sp" />
+       android:textSize="12sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="1.0"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="1.0" />
 
    <ImageView
        android:id="@+id/imageView"
        android:layout_width="65dp"
        android:layout_height="75dp"
-       android:layout_marginLeft="75dp"
-       android:layout_marginTop="400dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.236"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.606"
        app:srcCompat="@drawable/yellow_card" />
+
+   <EditText
+       android:id="@+id/yellow_cards_bet"
+       android:layout_width="70dp"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:hint="yellow"
+       android:inputType="numberDecimal"
+       android:textColor="#FFFFFF"
+       android:textColorHint="#FFFFFF"
+       android:textSize="20sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.369"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.614" />
+
+   <EditText
+       android:id="@+id/red_cards_bet"
+       android:layout_width="70dp"
+       android:layout_height="wrap_content"
+       android:gravity="center"
+       android:hint="red"
+       android:inputType="numberDecimal"
+       android:textColor="#FFFFFF"
+       android:textColorHint="#FFFFFF"
+       android:textSize="20sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.771"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.614" />
 
    <ImageView
        android:id="@+id/imageView"
        android:layout_width="58dp"
        android:layout_height="68dp"
-       android:layout_marginLeft="220dp"
-       android:layout_marginTop="405dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.628"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.61"
        app:srcCompat="@drawable/red_card" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

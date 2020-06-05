@@ -41,10 +41,12 @@
     <Button
         android:id="@+id/createLeague"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="56dp"
         android:layout_weight="3"
+        android:background="#FF3D423D"
         android:onClick="createGroup"
         android:text="@string/create_group"
         android:textColor="#8BC34A"
@@ -54,23 +56,25 @@
     <Button
         android:id="@+id/joinLeague"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="3"
+        android:background="#3D423D"
         android:onClick="joinGroup"
         android:text="@string/join_group"
         android:textColor="#8BC34A"
         app:layout_constraintEnd_toStartOf="@+id/createLeague"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <ScrollView
-        android:layout_width="292dp"
-        android:layout_height="475dp"
+        android:layout_width="295dp"
+        android:layout_height="472dp"
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 

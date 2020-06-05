@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E3B2B2"
+    android:background="#C2C8BB"
     tools:context=".PopupPlayersList">
+
     <LinearLayout
         android:id="@+id/popup_linear_layout"
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,13 +25,13 @@
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:text="Choose Players Scoring" />
+
         <ListView
             android:id="@+id/players_options_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:drawSelectorOnTop="false"
-            android:visibility="visible"
             android:layout_marginTop="20dp"
-            />
+            android:drawSelectorOnTop="false"
+            android:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>
