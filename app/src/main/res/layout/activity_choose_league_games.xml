@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChooseLeagueGames"
-    android:background="@drawable/soccer_background_1">
+    android:background="@drawable/soccer_background_5">
     <LinearLayout
         android:id="@+id/outer_layout"
         android:layout_width="match_parent"
