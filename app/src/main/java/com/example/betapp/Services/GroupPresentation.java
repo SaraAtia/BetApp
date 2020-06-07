@@ -10,10 +10,10 @@ import android.widget.TextView;
 import com.example.betapp.AllGamesPresentation;
 import com.example.betapp.GeneralRankingTable;
 import com.example.betapp.R;
-import com.example.betapp.RankingTable;
 
 public class GroupPresentation extends AppCompatActivity {
     String code;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +23,20 @@ public class GroupPresentation extends AppCompatActivity {
         groups_code_obj.setText("Code: "+ code);
     }
 
+    /**
+     * on click.
+     * @param view
+     */
     public void openRankTable(View view){
         Intent intent = new Intent(this, GeneralRankingTable.class);
         intent.putExtra("groupID", this.code);
         startActivity(intent);
     }
 
+    /**
+     * on click.
+     * @param view
+     */
     public void openAllGames(View view){
         Intent intent = new Intent(this, AllGamesPresentation.class);
         intent.putExtra("groupID", this.code);

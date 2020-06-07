@@ -43,7 +43,7 @@ public class GamePresentation extends AppCompatActivity {
                 java.sql.Date date=new java.sql.Date(millis);
                 Date game_date = new SimpleDateFormat("yyyy-MM-dd").parse(curr_game.mDate);
                 Date curr_date = new SimpleDateFormat("yyyy-MM-dd").parse(date.toString());
-                if(curr_date.equals(game_date)){
+                if(curr_date.equals(game_date)){ //TODO: prevent bet a day before game happens
                     curr_game.mAvailable_to_bet = false;
                 }
                 final Context context = this;

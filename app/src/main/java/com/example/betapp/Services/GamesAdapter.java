@@ -36,6 +36,14 @@ public class GamesAdapter extends BaseAdapter{
     private String league_id;
     private HashMap<String, Boolean[]> mGames_selected; //league_id:next game and true or false if selected
     private int MAX_GAMES_TO_CHOOSE = 3;
+
+    /**
+     * constructor.
+     * @param c
+     * @param items
+     * @param games_selected
+     * @param curr_league_id
+     */
     public GamesAdapter(Context c, ArrayList<Button> items, HashMap<String, Boolean[]> games_selected, String curr_league_id){
         this.m_context = c;
         this.m_items_arr = items;
@@ -48,6 +56,7 @@ public class GamesAdapter extends BaseAdapter{
             checked_map.put(i, ((CheckBox)items.get(i)).isChecked());
         }
     }
+
     @Override
     public int getCount() {
         return m_items_arr.size();

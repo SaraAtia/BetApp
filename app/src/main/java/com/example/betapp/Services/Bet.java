@@ -2,13 +2,11 @@ package com.example.betapp.Services;
 
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 //TODO: remove bet from database
 public class Bet {
@@ -20,6 +18,15 @@ public class Bet {
     public String mNum_of_yellow_cards;
     public String mNum_of_red_cards;
 
+    /**
+     * constructor.
+     * @param homeTeamScore
+     * @param awayTeamScore
+     * @param numOYellowCards
+     * @param numOfRedCards
+     * @param home_team_players_scored
+     * @param away_team_players_scored
+     */
     public Bet(String homeTeamScore, String awayTeamScore, String numOYellowCards,
                String numOfRedCards,  HashMap<String, String> home_team_players_scored, HashMap<String, String> away_team_players_scored) {
         this.mHome_team_score = homeTeamScore;
@@ -30,6 +37,10 @@ public class Bet {
         this.mAway_team_players_scored = away_team_players_scored;
     }
 
+    /**
+     * constructor that get's json object.
+     * @param betJSON
+     */
     public Bet(JSONObject betJSON){
         try {
             mBetID = betJSON.getString("mBetID");
@@ -54,16 +65,33 @@ public class Bet {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            //return null;
+            //todo: decide what to do
         }
 
 
     }
 
+    /**
+     * getting the bet id.
+     * @return
+     */
     public String getmBetID() {
         return mBetID;
     }
 
+    /**
+     * setter.
+     * @param betID
+     */
+    public void setmBetID(String betID){
+        mBetID = betID;
+    }
+
+    /**
+     * upload the bet to DB.
+     * @param bet
+     * @return
+     */
     public static String uploadToDB(Bet bet) {
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         String entry = DB.getReference("bets").push().getKey();

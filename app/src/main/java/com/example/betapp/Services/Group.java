@@ -1,6 +1,5 @@
 package com.example.betapp.Services;
 
-
 import com.example.betapp.Consts.Error_FLAG;
 import com.example.betapp.Services.HttpService.HttpService;
 import com.google.firebase.database.DatabaseReference;
@@ -18,7 +17,6 @@ import static com.example.betapp.Consts.GROUPS_DATABASE;
 //TODO: remove group from database
 
 public class Group {
-//    private HashMap<String, ArrayList<String>> group;
     public String groupID;
     public String groupName;
     public ArrayList<String> users; // string = userID
@@ -27,6 +25,10 @@ public class Group {
     private HashMap<String, ArrayList<String>> games_by_date;//Date:gamesID
     private HashMap<String, Integer> users_rank;//userID:rank
 
+    /**
+     * constructor.
+     * @param id
+     */
     public Group(String id){
         this.groupName = "";
         this.groupID = id;
@@ -37,35 +39,36 @@ public class Group {
         this.users = new ArrayList<>();
     }
 
+    /**
+     * constructor.
+     */
     public Group(){
         this.groupName = "";
     }
-    public String getGroupID() {
-        return groupID;
-    }
 
-    public void uploadToDB(){
-        FirebaseDatabase DB = FirebaseDatabase.getInstance();
-        String key = DB.getReference("groups").push().getKey();
-        DB.getReference().child(key).setValue(this);
+    /**
+     * getter.
+     * @return
+     */
+    public String getGroupName() {
+        return groupName;
     }
 
     /**
-     * Pull group from DB by groupID.
-     * @param groupId - string or null
+     * getter.
+     * @param groupID
      */
-   /* public static Group getGroup(String groupId){
-        try{
-            JSONObject gameJSON = HttpService.getInstance().getJSON(Consts.GROUPS_DATABASE);
-            Object group =  gameJSON.get(groupId);
-            return (Group) group;
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
+    }
 
-        } catch (InterruptedException | ExecutionException | JSONException e){
-            return null; //TODO: to handle right
-        }
-        //return null; //TODO: pull from DB
-//        return new Group();
-    }*/
+    /**
+     * getter.
+     * @return
+     */
+    public String getGroupID() {
+        return groupID;
+    }
 
     /**
      * check if user is
@@ -88,6 +91,12 @@ public class Group {
    }
 
 
+    /**
+     * convert json array to arrayList.
+     * @param jsonArray
+     * @return
+     * @throws JSONException
+     */
    private static ArrayList<String> convert_JSONArray_to_ArrayList(JSONArray jsonArray) throws JSONException {
        ArrayList<String> arrayList = new ArrayList<String>();
        for(int i = 0; i < jsonArray.length(); i++){
@@ -96,7 +105,12 @@ public class Group {
        return arrayList;
    }
 
-
+    /**
+     * add new user to the group in the DB.
+     * @param groupID
+     * @param userID
+     * @return
+     */
    public static Error_FLAG addUser(String groupID, String userID){
         Error_FLAG response = isUserInGroup(groupID, userID);
         if(response == Error_FLAG.NO_ERROR){
@@ -116,6 +130,10 @@ public class Group {
         return response;
    }
 
+    /**
+     * upload the group to the DB.
+     * @return
+     */
     public static Group createGroupOnDB(){
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         String groupID = DB.getReference("groups").push().getKey();
@@ -124,6 +142,10 @@ public class Group {
         return group;
     }
 
+    /**
+     * setter (on DB).
+     * @param newState
+     */
     public void setGroupStatus(boolean newState) {
         this.status = newState;
         // update status on DB
@@ -131,6 +153,10 @@ public class Group {
         DB.getReference("groups").child(this.groupID).child("status").setValue(newState);
     }
 
+    /**
+     * update the group's name.
+     * @param group_name
+     */
     public void updateGroupName(String group_name) {
         this.groupName = group_name;
         // update name on DB
@@ -140,6 +166,10 @@ public class Group {
         group_name_field.setValue(group_name);
     }
 
+    /**
+     * setter (on DB).
+     * @param games
+     */
     public void setGroupGames(HashMap<String, String> games) { //todo:
         this.games = games;
         // update name on DB
@@ -150,22 +180,14 @@ public class Group {
         }
     }
 
+    /**
+     * add user to the group.
+     * @param userID
+     */
     public void addUser(String userID){
         this.users.add(userID);
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DB.getReference("groups").child(this.groupID).
                 child("users").setValue(this.users);
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupID(String groupID) {
-        this.groupID = groupID;
-    }
-
-    public void setUsers(ArrayList<String> users) {
-        this.users = users;
     }
 }

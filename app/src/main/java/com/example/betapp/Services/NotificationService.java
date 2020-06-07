@@ -12,8 +12,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.betapp.AuthActivity;
 import com.example.betapp.R;
-import com.example.betapp.Services.SoccerGame;
-
 
 import java.util.ArrayList;
 

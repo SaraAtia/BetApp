@@ -21,6 +21,12 @@ public class PlayersAdapter extends BaseAdapter {
     private final ArrayList<CheckBox> mPlayers_view;
     private final HashMap<Integer, Boolean> mChecked_map; //position:isChecked - contain all players
 
+    /**
+     * constructor.
+     * @param c
+     * @param items
+     * @param teamID
+     */
     public PlayersAdapter(Context c, ArrayList<CheckBox> items, String teamID){
         this.mContext = c;
         this.mPlayers_view = items;
@@ -36,16 +42,31 @@ public class PlayersAdapter extends BaseAdapter {
             this.mChecked_map = Gamble.teamPlayersChecked.get(teamID);
         }
     }
+
+    /**
+     * getter.
+     * @return
+     */
     @Override
     public int getCount() {
         return mPlayers_view.size();
     }
 
+    /**
+     * getter.
+     * @param position
+     * @return
+     */
     @Override
     public Button getItem(int position) {
         return mPlayers_view.get(position);
     }
 
+    /**
+     * getter.
+     * @param position
+     * @return
+     */
     @Override
     public long getItemId(int position) {
         return position;
@@ -78,8 +99,5 @@ public class PlayersAdapter extends BaseAdapter {
         b.setText(this.getItem(position).getText());
         b.setTag(this.mPlayers_view.get(position).getTag());
         return view;
-    }
-    public ArrayList<CheckBox> getPlayersView() {
-        return mPlayers_view;
     }
 }

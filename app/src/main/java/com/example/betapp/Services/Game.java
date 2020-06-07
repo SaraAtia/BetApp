@@ -1,11 +1,9 @@
 package com.example.betapp.Services;
 
 import com.example.betapp.Consts;
-import com.example.betapp.R;
 import com.example.betapp.Services.HttpService.HttpService;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,20 +22,22 @@ public class Game {
     public String home_teamID, away_teamID;
     public boolean mAvailable_to_bet;
     public HashMap<String, String> mUsers_bets; //user id, bet id
-    private HashMap<String, String> mGame_details; //game info
-    private boolean isFinished;
+    public HashMap<String, HashMap<String, String>> ranking_table;
 
+    /**
+     * default constructor.
+     */
     public Game(){}
-    public Game(String groupID, String gameID, String date, String gameID_API, HashMap<String, String> users_bets) {
-        this.mGroupID = groupID;
-        this.mGameID = gameID;
-        this.mDate = date;
-        this.mGameID_API = gameID_API;
-        this.mUsers_bets = users_bets;
-        this.mAvailable_to_bet = true;
-        this.mGame_details = new HashMap<>();
-    }
 
+    /**
+     * constructor.
+     * @param groupID
+     * @param gameID
+     * @param date
+     * @param gameID_API
+     * @param gameName
+     * @param available_to_bet
+     */
     public Game(String groupID, String gameID, String date,String gameID_API, String gameName, boolean available_to_bet){
         this.mGroupID = groupID;
         this.mGameID = gameID;
@@ -46,8 +46,18 @@ public class Game {
         this.mGame_name = gameName;
         this.mUsers_bets = new HashMap<>();
         this.mAvailable_to_bet = available_to_bet;
-        this.mGame_details = new HashMap<>();
+        this.ranking_table = new HashMap<>();
     }
+
+    /**
+     * constructor.
+     * @param groupID
+     * @param date
+     * @param gameID
+     * @param gameName
+     * @param home_teamId
+     * @param away_teamId
+     */
     public Game(String groupID, String date, String gameID, String gameName, String home_teamId, String away_teamId) {
         this.mGroupID = groupID;
         this.mDate = date;
@@ -57,20 +67,22 @@ public class Game {
         this.away_teamID = away_teamId;
         this.mUsers_bets = new HashMap<>();
         this.mAvailable_to_bet = true;
-        this.mGame_details = new HashMap<>();
+        this.ranking_table = new HashMap<>();
     }
 
-    public void setMapValues(ArrayList<String> keys, ArrayList<String> values){
-        int length = keys.size();
-        for(int i = 0; i < length; i++){
-            this.mGame_details.put(keys.get(i), values.get(i));
-        }
+    /**
+     * setter.
+     * @param game_entry
+     */
+    public void setGameID(String game_entry) {
+        this.mGameID = game_entry;
     }
 
-    public void setAvailableToBet(boolean isAvailable){
-        this.mAvailable_to_bet = isAvailable;
-    }
-
+    /**
+     * get the game details from the API by the game id in the API.
+     * @param gameID_API
+     * @return
+     */
     public static HashMap<String, String> getGameDetails(String gameID_API){
         HashMap<String, String> game_details = new HashMap<>();
         try {
@@ -92,6 +104,11 @@ public class Game {
         }
     }
 
+    /**
+     * upload game to DB.
+     * @param game
+     * @return
+     */
     public static String uploadToDB(Game game){
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         String entry = DB.getReference("games").push().getKey();
@@ -100,6 +117,11 @@ public class Game {
         return entry;
     }
 
+    /**
+     * create game object from the data in the DB by the game id.
+     * @param gameID
+     * @return
+     */
     public static Game getGame(String gameID) {
         try{
             JSONObject gamesJSON = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE);
@@ -113,9 +135,5 @@ public class Game {
             e.printStackTrace();
             return null; //TODO: to handle right
         }
-    }
-
-    public void setGameID(String game_entry) {
-        this.mGameID = game_entry;
     }
 }
