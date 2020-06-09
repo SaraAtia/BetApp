@@ -34,6 +34,7 @@ public class NotificationService extends IntentService {
     int id;
     public HashMap<String, String> groups;
     boolean initialized;
+    public static int t = 0;
 
     public NotificationService()
     {
@@ -51,9 +52,11 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        int time = 600000;
+        int debugTime = 3000;
         while(true){
             try {
-                Thread.sleep(600000);
+                Thread.sleep(time);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -61,6 +64,7 @@ public class NotificationService extends IntentService {
                 init();
             } else {
                 updateGames();
+                t++;
             }
         }
     }
@@ -99,6 +103,10 @@ public class NotificationService extends IntentService {
             } else {
                 currHomeScore = 0;
             }
+
+//            if (t>1){
+//                currHomeScore += 2;
+//            }
 
             int currAwayScore;
             if (awayScore.toString() != "null") {
