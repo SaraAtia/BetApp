@@ -91,7 +91,7 @@ public class MyGroups extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        //this.startService(); // TODO: uncomment to start notification service
+        this.startService(); // TODO: uncomment to start notification service
     }
 
     private void openGroup(String groupID){

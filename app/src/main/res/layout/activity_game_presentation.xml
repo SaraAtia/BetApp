@@ -12,18 +12,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/game_present_layout">
+
         <TextView
+            android:id="@+id/game_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/game_name"/>
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
         <TextView
+            android:id="@+id/game_league"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/game_league"/>
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
         <TextView
+            android:id="@+id/game_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/game_date"/>
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
 
 
 

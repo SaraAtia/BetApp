@@ -34,6 +34,14 @@ public class SoccerGame {
         return homeTeamScore;
     }
 
+    public void setHomeTeamScore(int homeTeamScore) {
+        this.homeTeamScore = homeTeamScore;
+    }
+
+    public void setAwayTeamScore(int awayTeamScore) {
+        this.awayTeamScore = awayTeamScore;
+    }
+
     public int getNumOfRedCards() {
         return numOfRedCards;
     }

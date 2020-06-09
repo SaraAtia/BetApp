@@ -11,25 +11,37 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.betapp.AuthActivity;
+import com.example.betapp.Consts;
+import com.example.betapp.MyGroups;
 import com.example.betapp.R;
+import com.example.betapp.Services.HttpService.HttpService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static com.example.betapp.App.CHANNEL_ID;
+import static com.example.betapp.MyGroups.mUser;
 
 public class NotificationService extends IntentService {
-    ArrayList<SoccerGame> games;
+    ArrayList<Game> games;
+    public ArrayList<SoccerGame> gamesList;
     int id;
+    public HashMap<String, String> groups;
+    boolean initialized;
 
     public NotificationService()
     {
         super( "NotificationService" );
         this.games = new ArrayList<>();
-        this.games.add(new SoccerGame("beitar-hapoel",1,0,
-                null,0,0,false));
-        this.games.add(new SoccerGame("maccabi-haifa",2,1,
-                null,0,0,false));
+        this.gamesList = new ArrayList<>();
         this.id = 1;
+        this.initialized = false;
     }
 
     public NotificationService(String name)
@@ -41,11 +53,15 @@ public class NotificationService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         while(true){
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            updateGames();
+            if (!this.initialized){
+                init();
+            } else {
+                updateGames();
+            }
         }
     }
 
@@ -65,19 +81,98 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void updateGames(){
-        for (int i=0;i<this.games.size();i++){
-            int newHome = 5;
-            int newAway = 2;
-            SoccerGame currentGame = this.games.get(i);
-            if (currentGame.getHomeTeamScore() != newHome || currentGame.getAwayTeamScore() != newAway){
-                SoccerGame newGame = new SoccerGame(currentGame.getMatch(),newHome,
-                        newAway,null,0,0,false);
-                this.games.remove(i);
-                this.games.add(newGame);
-                String match = currentGame.getMatch();
-                notifyGamesResults(match,newHome,newAway);
+    private void updateGames() {
+    try{
+        for (int i=0; i<this.games.size();i++) {
+            Game game = games.get(i);
+            JSONObject gameJSON = HttpService.getInstance().getJSON(
+                    Consts.GAME_DETAILS_BY_EVENT_ID + game.mGameID_API);
+            String match = gameJSON.getJSONArray("events").getJSONObject(0)
+                    .getString("strEvent");
+            Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                    .get("intHomeScore");
+            Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                    .get("intAwayScore");
+            int currHomeScore;
+            if (homeScore.toString() != "null") {
+                currHomeScore = Integer.parseInt(homeScore.toString());
+            } else {
+                currHomeScore = 0;
             }
+
+            int currAwayScore;
+            if (awayScore.toString() != "null") {
+                currAwayScore = Integer.parseInt(awayScore.toString());
+            } else {
+                currAwayScore = 0;
+            }
+
+            SoccerGame currentGame = this.gamesList.get(i);
+            if (currentGame.getHomeTeamScore() != currHomeScore || currentGame.getAwayTeamScore() != currAwayScore) {
+                this.gamesList.get(i).setHomeTeamScore(currHomeScore);
+                this.gamesList.get(i).setAwayTeamScore(currAwayScore);
+                notifyGamesResults(match, currHomeScore, currAwayScore);
+            }
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+        }
+
+    private void init(){
+        try {
+            groups = mUser.getUserGroups();
+        } catch (Exception e){
+            return;
+        }
+        if (groups.isEmpty()){
+            return;
+        } else {
+            Iterator iterator = groups.entrySet().iterator();
+            while(iterator.hasNext()){
+                Map.Entry mapElement = (Map.Entry)iterator.next();
+                String groupId = mapElement.getValue().toString();
+                try {
+                    JSONObject group = HttpService.getInstance().getJSON(
+                            "https://betapp-7ea26.firebaseio.com/groups/"+
+                                    groupId +".json");
+                    JSONObject games = group.getJSONObject("games");
+                    Iterator<String> keys = games.keys();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        Game game = Game.getGame(key);
+                        this.games.add(game);
+                        JSONObject gameJSON = HttpService.getInstance().getJSON(
+                                Consts.GAME_DETAILS_BY_EVENT_ID+game.mGameID_API);
+                        String match = gameJSON.getJSONArray("events").getJSONObject(0)
+                                .getString("strEvent");
+                        Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                                .get("intHomeScore");
+                        Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                                .get("intAwayScore");
+                        int currHomeScore;
+                        if(homeScore.toString() != "null"){
+                            currHomeScore = Integer.parseInt(homeScore.toString());
+
+                        } else {
+                            currHomeScore = 0;
+                        }
+                        int currAwayScore;
+                        if(awayScore.toString() != "null"){
+                            currAwayScore = Integer.parseInt(awayScore.toString());
+                        } else {
+                            currAwayScore = 0;
+                        }
+                        SoccerGame game1 = new SoccerGame(
+                                match,currHomeScore,currAwayScore,null,
+                                0,0,false);
+                        this.gamesList.add(game1);
+                    }
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            this.initialized = true;
         }
     }
 }
