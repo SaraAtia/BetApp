@@ -53,7 +53,7 @@ public class NotificationService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         while(true){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(600000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
