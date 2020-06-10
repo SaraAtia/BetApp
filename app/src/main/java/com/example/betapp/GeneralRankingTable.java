@@ -2,6 +2,7 @@ package com.example.betapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TableLayout;
@@ -71,5 +72,15 @@ public class GeneralRankingTable extends AppCompatActivity {
         tr.addView(userNameView);
 
         mRanking_table.addView(tr);
+    }
+
+    /**
+     * When clicking back button on device - return to myGroups.
+     */
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(this, MyGroups.class);
+        startActivity(intent);
     }
 }

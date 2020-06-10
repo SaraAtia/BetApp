@@ -73,4 +73,14 @@ public class AllGamesPresentation extends AppCompatActivity {
          intent.putExtra("gameID", gameID);
          startActivity(intent);
      }
+
+    /**
+     * When clicking back button on device - return to myGroups.
+     */
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(this, MyGroups.class);
+        startActivity(intent);
+    }
 }

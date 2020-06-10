@@ -42,55 +42,89 @@ public class MyGroups extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // user ID as saved in authentication info
         final String userIDAuth = getIntent().getStringExtra("userIDAuth");
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        // get the map between user id in authentication to user entry in user's database
-        DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
         final Context context = this;
-        user_map_DB.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    mUserID = ds.child(userIDAuth).getValue(String.class); //TODO: if null - create a new user on db
-                    // get the map between user id in authentication to user entry in user's database
-                    DatabaseReference users_DB = database.getReference("users");
-                    users_DB.addValueEventListener(new ValueEventListener(){
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            mUser = dataSnapshot.child(mUserID).getValue(User.class);
-                            AuthActivity.mUser = mUser;
-                            HashMap<String, String> groups = mUser.getUserGroups();
-                            if (groups != null) {
-                                Object[] groups_names = groups.keySet().toArray();
-                                Object[] groups_ids = groups.values().toArray();
-                                for (int i = 0; i < groups.size(); i++) {
-                                    Button btnShow = new Button(context);
-                                    btnShow.setText((String) groups_names[i]);
-                                    btnShow.setLayoutParams(new LinearLayout.LayoutParams
-                                            (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
-                                                    LayoutParams.WRAP_CONTENT));
-                                    btnShow.setTag((String) groups_ids[i]);
-                                    btnShow.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            openGroup(v.getTag().toString());
-                                        }
-                                    });
-                                    layout.addView(btnShow);
+        if(userIDAuth!=null){
+// get the map between user id in authentication to user entry in user's database
+            DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
+            user_map_DB.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        mUserID = ds.child(userIDAuth).getValue(String.class); //TODO: if null - create a new user on db
+                        // get the map between user id in authentication to user entry in user's database
+                        DatabaseReference users_DB = database.getReference("users");
+                        users_DB.addValueEventListener(new ValueEventListener(){
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                mUser = dataSnapshot.child(mUserID).getValue(User.class);
+                                AuthActivity.mUser = mUser;
+                                HashMap<String, String> groups = mUser.getUserGroups();
+                                if (groups != null) {
+                                    Object[] groups_names = groups.keySet().toArray();
+                                    Object[] groups_ids = groups.values().toArray();
+                                    for (int i = 0; i < groups.size(); i++) {
+                                        Button btnShow = new Button(context);
+                                        btnShow.setText((String) groups_names[i]);
+                                        btnShow.setLayoutParams(new LinearLayout.LayoutParams
+                                                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
+                                                        LayoutParams.WRAP_CONTENT));
+                                        btnShow.setTag((String) groups_ids[i]);
+                                        btnShow.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                openGroup(v.getTag().toString());
+                                            }
+                                        });
+                                        layout.addView(btnShow);
+                                    }
                                 }
                             }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } else {
+
+            DatabaseReference users_DB = database.getReference("users");
+            users_DB.addValueEventListener(new ValueEventListener(){
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mUser = dataSnapshot.child(AuthActivity.mUser.getUserID()).getValue(User.class);
+                    HashMap<String, String> groups = mUser.getUserGroups();
+                    if (groups != null) {
+                        Object[] groups_names = groups.keySet().toArray();
+                        Object[] groups_ids = groups.values().toArray();
+                        for (int i = 0; i < groups.size(); i++) {
+                            Button btnShow = new Button(context);
+                            btnShow.setText((String) groups_names[i]);
+                            btnShow.setLayoutParams(new LinearLayout.LayoutParams
+                                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
+                                            LayoutParams.WRAP_CONTENT));
+                            btnShow.setTag((String) groups_ids[i]);
+                            btnShow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    openGroup(v.getTag().toString());
+                                }
+                            });
+                            layout.addView(btnShow);
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+
         this.startService(); // TODO: uncomment to start notification service
     }
 
