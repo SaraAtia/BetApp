@@ -1,3 +1,6 @@
+DFB-Pokal:4485
+Germany Liga 3:4639
+German 2. Bundesliga:4399
 English Premier League:4328
 English League Championship:4329
 FA Cup:4482
@@ -12,7 +15,6 @@ Italian Serie A:4332
 Supercoppa Italiana:4507
 Coppa Italia:4506
 German Bundesliga:4331
-DFB-Pokal:4485
 FIFA World Cup:4429
 FIFA Club World Cup:4503
 UEFA Champions League:4480

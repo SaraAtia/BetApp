@@ -81,8 +81,12 @@ public class Gamble extends AppCompatActivity {
      */
     private HashMap<String, String> getSelectedPlayers(String teamID){
         HashMap<String, String> players_selected = new HashMap<>();
-        HashMap<Integer, Boolean> players_by_teamID= this.teamPlayersChecked.get(teamID);
+        HashMap<Integer, Boolean> players_by_teamID= teamPlayersChecked.get(teamID);//todo: if null
         ArrayList<CheckBox> players_info_by_teamID = players_view_by_teamID.get(teamID);
+        if (players_by_teamID == null){
+            teamPlayersChecked.remove(teamID);
+            return new HashMap<String, String>();
+        }
         for(Map.Entry<Integer, Boolean> entry: players_by_teamID.entrySet()){
             if(entry.getValue()){
                 CheckBox player_checkbox = players_info_by_teamID.get(entry.getKey());
