@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -126,6 +127,20 @@ public class Gamble extends AppCompatActivity {
         }
         startActivity(intent);
     }
+    //TODO: add to code and allow user to change his bet
+    private boolean checkForDoubleBet() throws InterruptedException, ExecutionException, JSONException {
+        boolean flag = false;
+        JSONObject game_bets = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).getJSONObject("mUsers_bets");
+        for (Iterator<String> it = game_bets.keys(); it.hasNext(); ) {
+            String userId = it.next();
+            if(userId.equals(AuthActivity.mUser.userID)){
+             flag= true;
+             break;
+            }
+        }
+        return flag;
+    }
+
 
     private boolean IsFieldFull() {
         //todo: ask eden if the players should be filled too
