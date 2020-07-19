@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.betapp.App.CHANNEL_ID;
-import static com.example.betapp.MyGroups.mUser;
 
 public class NotificationService extends IntentService {
     ArrayList<Game> games;
@@ -129,7 +128,7 @@ public class NotificationService extends IntentService {
 
     private void init(){
         try {
-            groups = mUser.getUserGroups();
+            groups = AuthActivity.mUser.getUserGroups();
         } catch (Exception e){
             return;
         }

@@ -34,8 +34,6 @@ import java.util.concurrent.ExecutionException;
 public class MyGroups extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    public static User mUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,39 +57,39 @@ public class MyGroups extends AppCompatActivity {
             user_map_DB.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        final String userID = ds.child(userIDAuth).getValue(String.class);
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        final String userID = dataSnapshot.child(userIDAuth).getValue(String.class);
                         // get the map between user id in authentication to user entry in user's database
                         if (userID == null) {
                             // new user signed in
                             addUserToDB();
-                            user_map_DB.child("users_map").
-                                    child(userIDAuth).setValue(AuthActivity.mUser.userID);
+                            user_map_DB.child(userIDAuth).setValue(AuthActivity.mUser.userID);
                         } else {
                             DatabaseReference users_DB = database.getReference("users");
                             users_DB.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    mUser = dataSnapshot.child(userID).getValue(User.class);
-                                    AuthActivity.mUser = mUser;
-                                    HashMap<String, String> groups = mUser.getUserGroups();
-                                    if (groups != null) {
-                                        Object[] groups_names = groups.keySet().toArray();
-                                        Object[] groups_ids = groups.values().toArray();
-                                        for (int i = 0; i < groups.size(); i++) {
-                                            Button btnShow = new Button(context);
-                                            btnShow.setText((String) groups_names[i]);
-                                            btnShow.setLayoutParams(new LinearLayout.LayoutParams
-                                                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
-                                                            LayoutParams.WRAP_CONTENT));
-                                            btnShow.setTag((String) groups_ids[i]);
-                                            btnShow.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    openGroup(v.getTag().toString());
-                                                }
-                                            });
-                                            layout.addView(btnShow);
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        AuthActivity.mUser = ds.child(userID).getValue(User.class);
+                                        HashMap<String, String> groups = AuthActivity.mUser.getUserGroups();
+                                        if (groups != null) {
+                                            Object[] groups_names = groups.keySet().toArray();
+                                            Object[] groups_ids = groups.values().toArray();
+                                            for (int i = 0; i < groups.size(); i++) {
+                                                Button btnShow = new Button(context);
+                                                btnShow.setText((String) groups_names[i]);
+                                                btnShow.setLayoutParams(new LinearLayout.LayoutParams
+                                                        (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
+                                                                LayoutParams.WRAP_CONTENT));
+                                                btnShow.setTag((String) groups_ids[i]);
+                                                btnShow.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        openGroup(v.getTag().toString());
+                                                    }
+                                                });
+                                                layout.addView(btnShow);
+                                            }
                                         }
                                     }
                                 }
@@ -101,7 +99,7 @@ public class MyGroups extends AppCompatActivity {
                                 }
                             });
                         }
-                    }
+//                    }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -112,8 +110,8 @@ public class MyGroups extends AppCompatActivity {
             users_DB.addValueEventListener(new ValueEventListener(){
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    mUser = dataSnapshot.child(AuthActivity.mUser.getUserID()).getValue(User.class);
-                    HashMap<String, String> groups = mUser.getUserGroups();
+                    AuthActivity.mUser = dataSnapshot.child(AuthActivity.mUser.getUserID()).getValue(User.class);
+                    HashMap<String, String> groups = AuthActivity.mUser.getUserGroups();
                     if (groups != null) {
                         Object[] groups_names = groups.keySet().toArray();
                         Object[] groups_ids = groups.values().toArray();
@@ -172,8 +170,7 @@ public class MyGroups extends AppCompatActivity {
         // new user signed in
         AuthActivity.mUser = new User();
         AuthActivity.mUser.user_name = getIntent().getStringExtra("user_name");
-        mUser = AuthActivity.mUser;
-        mUser.uploadToDB(AuthActivity.mUser);
+        User.uploadToDB(AuthActivity.mUser);
     }
 
     public void createGroup(View view){
