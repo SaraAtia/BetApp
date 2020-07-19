@@ -10,6 +10,16 @@ public class User {
     public HashMap<String, String> m_groups = new HashMap<>(); // groupName, groupID
 
 
+    public User(){
+        this.m_groups = new HashMap<>();
+    }
+
+    public User(String user_name, String userID){
+        this.user_name = user_name;
+        this.userID = userID;
+        this.m_groups = new HashMap<>();
+    }
+
     /**
      * upload user to DB.
      * @param user

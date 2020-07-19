@@ -36,10 +36,9 @@ public class AuthActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        /*if (currentUser != null){ todo: return
+        if (currentUser != null){
             openMyGroupsActivity(null, currentUser.getUid());
-        }*/
-
+        }
     }
 
     @Override
@@ -94,12 +93,6 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void signIn(final String user_name, String email, String password){
-        /////////////////////// TODO: delete from here //////////////////////////
-        if(email.isEmpty()){
-            email = "sara@betapp.com";
-            password = "123456";
-        }
-        /////********************* Till here *************************//////////////////
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -130,7 +123,5 @@ public class AuthActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        //TODO: add to map "FBUidToDBUid"
     }
 }

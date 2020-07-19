@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.betapp.Services.Bet;
 import com.example.betapp.Services.HttpService.HttpService;
+import com.example.betapp.Services.NotificationService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -101,6 +102,9 @@ public class Gamble extends AppCompatActivity {
      * @param view submit btn
      */
     public void submitBet(View view){
+        if(!IsFieldFull()){
+            return;
+        }
         Bet bet = new Bet(this.homeScore.getText().toString(),this.awayScore.getText().toString(),
                 this.yellowCards.getText().toString(), this.redCards.getText().toString(),
                 getSelectedPlayers(this.home_teamID), getSelectedPlayers(this.away_teamID));
@@ -121,6 +125,19 @@ public class Gamble extends AppCompatActivity {
             e.printStackTrace();
         }
         startActivity(intent);
+    }
+
+    private boolean IsFieldFull() {
+        //todo: ask eden if the players should be filled too
+        if(this.homeScore.getText().toString().isEmpty()||
+                this.awayScore.getText().toString().isEmpty()||
+                this.yellowCards.getText().toString().isEmpty()||
+                this.redCards.getText().toString().isEmpty()){
+            NotificationService.PopupMsg(this,
+                    "Must Fill All Text Fields To Continue", Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
     }
 }
 
