@@ -153,6 +153,7 @@ public class GamesAdapter extends BaseAdapter{
                 // pull next 15 games of league selected
                 JSONArray league_gamesJSON = (JSONArray) HttpService.getInstance().
                         getJSON(Consts.NEXT15EVENTS_BY_LEAGUEID + leagueId).get("events");
+
                 // array indicated games selected from league
                 Boolean[] league_games = mGames_selected.get(leagueId);
                 for (int j = 0; j<league_games.length; j++) {
@@ -163,13 +164,24 @@ public class GamesAdapter extends BaseAdapter{
                         String dateEvent = league_gamesJSON.getJSONObject(j).getString("dateEvent");
                         String homeTeamID = league_gamesJSON.getJSONObject(j).getString("idHomeTeam");
                         String awayTeamID = league_gamesJSON.getJSONObject(j).getString("idAwayTeam");
+                        if(idEvent.equals("") || strEvent.equals("") || dateEvent.equals("")
+                                || homeTeamID.equals("") || awayTeamID.equals("")){
+                            if(!strEvent.equals("")){
+                                Toast.makeText(m_context, "Can't Bet on "+strEvent, Toast.LENGTH_SHORT);
+                            } else {
+                                Toast.makeText(m_context, "Can't Bet on This Game", Toast.LENGTH_SHORT);
+                            }
+                        } else {
+                            Game g = new Game(groupID, dateEvent, idEvent, strEvent, homeTeamID, awayTeamID);
+                            String game_entry = Game.uploadToDB(g);
+                            games_selected.put(game_entry, g.mGame_name);
+                        }
 
-                        Game g = new Game(groupID, dateEvent, idEvent, strEvent, homeTeamID, awayTeamID);
-                        String game_entry = Game.uploadToDB(g);
-                        games_selected.put(game_entry, g.mGame_name);
                     }
                 }
-            } catch (InterruptedException | ExecutionException| JSONException e) {
+            } catch (InterruptedException | ExecutionException|
+                    JSONException| NullPointerException e) {//todo:
+                Toast.makeText(m_context, "An Error Accord", Toast.LENGTH_LONG);
                 e.printStackTrace();
             }
         }

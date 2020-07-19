@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 
-//TODO: remove game from database
 public class Game {
     public String mGroupID;
     public String mGameID;
@@ -91,12 +90,9 @@ public class Game {
                     getJSON(Consts.GAME_DETAILS_BY_EVENT_ID+gameID_API).get("events");
             game_details.put("idEvent",game_info.getString("idEvent"));
             game_details.put("strEvent",game_info.getString("strEvent"));
-            game_details.put("idLeague",game_info.getString("idLeague"));
-            game_details.put("strLeague",game_info.getString("strLeague"));
-            game_details.put("strHomeTeam",game_info.getString("strHomeTeam"));
-            game_details.put("strAwayTeam",game_info.getString("strAwayTeam"));
             game_details.put("dateEvent",game_info.getString("dateEvent"));
-            game_details.put("strTimeLocal",game_info.getString("strTimeLocal"));
+            game_details.put("strHomeTeam",game_info.getString("idHomeTeam"));
+            game_details.put("strAwayTeam",game_info.getString("idAwayTeam"));
             return game_details;
         } catch (InterruptedException | ExecutionException| JSONException e){
             e.printStackTrace();

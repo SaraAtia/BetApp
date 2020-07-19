@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.example.betapp.Services.Group;
 import com.example.betapp.Services.GroupPresentation;
+import com.example.betapp.Services.HttpService.HttpRequest;
+import com.example.betapp.Services.HttpService.HttpService;
 import com.example.betapp.Services.NotificationService;
 import com.example.betapp.Services.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,8 +21,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 /**
  * My Groups activity allow to create a group or join to exist group by a code.
@@ -30,7 +34,6 @@ import java.util.HashMap;
 public class MyGroups extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    public String mUserID;
     public static User mUser;
 
 
@@ -42,57 +45,69 @@ public class MyGroups extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // user ID as saved in authentication info
         final String userIDAuth = getIntent().getStringExtra("userIDAuth");
+//        final String userName = getIntent().getStringExtra("user_name");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final Context context = this;
-        if(userIDAuth!=null){
+        if(IsFirstUsage(userIDAuth)){
+            this.startService();
+            return;
+        }
+        if(AuthActivity.mUser==null) {
+            //can be a new user or a signing in of old user
 // get the map between user id in authentication to user entry in user's database
-            DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
+            final DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
             user_map_DB.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        mUserID = ds.child(userIDAuth).getValue(String.class); //TODO: if null - create a new user on db
+                        final String userID = ds.child(userIDAuth).getValue(String.class);
                         // get the map between user id in authentication to user entry in user's database
-                        DatabaseReference users_DB = database.getReference("users");
-                        users_DB.addValueEventListener(new ValueEventListener(){
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                mUser = dataSnapshot.child(mUserID).getValue(User.class);
-                                AuthActivity.mUser = mUser;
-                                HashMap<String, String> groups = mUser.getUserGroups();
-                                if (groups != null) {
-                                    Object[] groups_names = groups.keySet().toArray();
-                                    Object[] groups_ids = groups.values().toArray();
-                                    for (int i = 0; i < groups.size(); i++) {
-                                        Button btnShow = new Button(context);
-                                        btnShow.setText((String) groups_names[i]);
-                                        btnShow.setLayoutParams(new LinearLayout.LayoutParams
-                                                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
-                                                        LayoutParams.WRAP_CONTENT));
-                                        btnShow.setTag((String) groups_ids[i]);
-                                        btnShow.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                openGroup(v.getTag().toString());
-                                            }
-                                        });
-                                        layout.addView(btnShow);
+                        if (userID == null) {
+                            // new user signed in
+                            addUserToDB();
+                            user_map_DB.child("users_map").
+                                    child(userIDAuth).setValue(AuthActivity.mUser.userID);
+                        } else {
+                            DatabaseReference users_DB = database.getReference("users");
+                            users_DB.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    mUser = dataSnapshot.child(userID).getValue(User.class);
+                                    AuthActivity.mUser = mUser;
+                                    HashMap<String, String> groups = mUser.getUserGroups();
+                                    if (groups != null) {
+                                        Object[] groups_names = groups.keySet().toArray();
+                                        Object[] groups_ids = groups.values().toArray();
+                                        for (int i = 0; i < groups.size(); i++) {
+                                            Button btnShow = new Button(context);
+                                            btnShow.setText((String) groups_names[i]);
+                                            btnShow.setLayoutParams(new LinearLayout.LayoutParams
+                                                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
+                                                            LayoutParams.WRAP_CONTENT));
+                                            btnShow.setTag((String) groups_ids[i]);
+                                            btnShow.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    openGroup(v.getTag().toString());
+                                                }
+                                            });
+                                            layout.addView(btnShow);
+                                        }
                                     }
                                 }
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+                        }
                     }
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
         } else {
-
             DatabaseReference users_DB = database.getReference("users");
             users_DB.addValueEventListener(new ValueEventListener(){
                 @Override
@@ -128,10 +143,37 @@ public class MyGroups extends AppCompatActivity {
         this.startService(); // TODO: uncomment to start notification service
     }
 
+    private boolean IsFirstUsage(String userIDAuth) {
+        try {
+            JSONObject users_mapJSON = HttpService.getInstance().getJSON(Consts.USERS_MAP_DB);
+            return false;
+        } catch (ExecutionException|InterruptedException e){
+            e.printStackTrace();
+            return false; //todo: handle error correctly
+        }
+        catch (JSONException e) {
+            //if it's the first user on DB - open tables
+            addUserToDB();
+            HashMap<String, String> users_map = new HashMap<>(); // userIDAuth:userID_DB
+            users_map.put(userIDAuth, AuthActivity.mUser.userID);
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.getReference("FBUidToDBUid").setValue(users_map);
+            return true;
+        }
+    }
+
     private void openGroup(String groupID){
         Intent intent = new Intent(this, GroupPresentation.class);
         intent.putExtra("groupID", groupID);
         startActivity(intent);
+    }
+
+    private void addUserToDB(){
+        // new user signed in
+        AuthActivity.mUser = new User();
+        AuthActivity.mUser.user_name = getIntent().getStringExtra("user_name");
+        mUser = AuthActivity.mUser;
+        mUser.uploadToDB(AuthActivity.mUser);
     }
 
     public void createGroup(View view){

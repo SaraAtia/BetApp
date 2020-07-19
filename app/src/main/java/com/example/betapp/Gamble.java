@@ -106,7 +106,7 @@ public class Gamble extends AppCompatActivity {
                 getSelectedPlayers(this.home_teamID), getSelectedPlayers(this.away_teamID));
         Bet.uploadToDB(bet);
         String betID = bet.getmBetID();
-        String userID = AuthActivity.mUser.user_ID;
+        String userID = AuthActivity.mUser.userID;
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DatabaseReference curr_game_ref = DB.getReference("games").child(gameID);
         DatabaseReference user_bets = curr_game_ref.child("mUsers_bets");

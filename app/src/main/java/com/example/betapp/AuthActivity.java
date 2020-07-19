@@ -36,9 +36,9 @@ public class AuthActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
-            openMyGroupsActivity(currentUser.getUid());
-        }
+        /*if (currentUser != null){ todo: return
+            openMyGroupsActivity(null, currentUser.getUid());
+        }*/
 
     }
 
@@ -50,32 +50,38 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(View view){
         // get fields
+        EditText user_name_field = findViewById(R.id.user_name);
         EditText email_address_field = findViewById(R.id.email_address);
         EditText password_field = findViewById(R.id.password);
 
+
         // get login information
+        String user_name = user_name_field.getText().toString();
         String email_address = email_address_field.getText().toString();
         String password = password_field.getText().toString();
 
-        signIn(email_address, password);
+        signIn(user_name, email_address, password);
     }
 
     public void signUp(View view){
         // get fields
+        EditText user_name_field = findViewById(R.id.user_name);
         EditText email_address_field = findViewById(R.id.email_address);
         EditText password_field = findViewById(R.id.password);
 
         // get login information
+        String user_name = user_name_field.getText().toString();
         String email_address = email_address_field.getText().toString();
         String password = password_field.getText().toString();
 
-        createAccount(email_address,password);
+        createAccount(user_name, email_address,password);
 
     }
 
-    public void openMyGroupsActivity(String userID) {
+    public void openMyGroupsActivity(String user_name, String userID) {
         Intent intent = new Intent(this, MyGroups.class);
         intent.putExtra("userIDAuth", userID);
+        intent.putExtra("user_name", user_name);
         startActivity(intent);
     }
 
@@ -87,12 +93,12 @@ public class AuthActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void signIn(String email, String password){
+    private void signIn(final String user_name, String email, String password){
         /////////////////////// TODO: delete from here //////////////////////////
-        /*if(email.isEmpty()){
+        if(email.isEmpty()){
             email = "sara@betapp.com";
             password = "123456";
-        }*/
+        }
         /////********************* Till here *************************//////////////////
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -101,7 +107,8 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            openMyGroupsActivity(user.getUid());
+
+                            openMyGroupsActivity(user_name, user.getUid());
                         } else {
                             popupMessage("Credentials incorrect");
                         }
@@ -109,7 +116,7 @@ public class AuthActivity extends AppCompatActivity {
                 });
     }
 
-    private void createAccount(String email, String password){
+    private void createAccount(final String user_name, String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -117,11 +124,13 @@ public class AuthActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            openMyGroupsActivity(user.getUid());
+                            openMyGroupsActivity(user_name, user.getUid());
                         } else {
                             popupMessage("Can't create account");
                         }
                     }
                 });
+
+        //TODO: add to map "FBUidToDBUid"
     }
 }

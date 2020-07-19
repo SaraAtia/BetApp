@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
-//TODO: remove bet from database
 public class Bet {
     private String mBetID;
     public String mHome_team_score;
@@ -67,8 +66,6 @@ public class Bet {
             e.printStackTrace();
             //todo: decide what to do
         }
-
-
     }
 
     /**
