@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.betapp.Services.Bet;
 import com.example.betapp.Services.HttpService.HttpService;
+import com.example.betapp.Services.NotificationService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -95,12 +97,24 @@ public class Gamble extends AppCompatActivity {
         }
         return players_selected;
     }
-
     /**
      * Save bet info and upload to DB.
      * @param view submit btn
      */
     public void submitBet(View view){
+        Intent intent = new Intent(this, AllGamesPresentation.class);
+        try {
+            String groupID = (String) HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).
+                    getJSONObject(gameID).get("mGroupID");
+            intent.putExtra("groupID", groupID);
+        } catch (JSONException|ExecutionException|InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Can't Pass to Next Screen - Bet Wasn't Saved", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!IsFieldFull()){
+            return;
+        }
         Bet bet = new Bet(this.homeScore.getText().toString(),this.awayScore.getText().toString(),
                 this.yellowCards.getText().toString(), this.redCards.getText().toString(),
                 getSelectedPlayers(this.home_teamID), getSelectedPlayers(this.away_teamID));
@@ -112,15 +126,33 @@ public class Gamble extends AppCompatActivity {
         DatabaseReference user_bets = curr_game_ref.child("mUsers_bets");
         user_bets.child(userID).setValue(betID);
         Toast.makeText(this, "Bet is saved", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, AllGamesPresentation.class);
-        try {
-            String groupID = (String) HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).
-                    getJSONObject(gameID).get("mGroupID");
-            intent.putExtra("groupID", groupID);
-        } catch (JSONException|ExecutionException|InterruptedException e) {
-            e.printStackTrace();
-        }
         startActivity(intent);
+    }
+
+    //TODO: add to code and allow user to change his bet
+    private boolean checkForDoubleBet() throws InterruptedException, ExecutionException, JSONException {
+        boolean flag = false;
+        JSONObject game_bets = HttpService.getInstance().getJSON(Consts.GAMES_DATABASE).getJSONObject("mUsers_bets");
+        for (Iterator<String> it = game_bets.keys(); it.hasNext(); ) {
+            String userId = it.next();
+            if(userId.equals(AuthActivity.mUser.userID)){
+                flag= true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    private boolean IsFieldFull() {
+        if(this.homeScore.getText().toString().isEmpty()||
+                this.awayScore.getText().toString().isEmpty()||
+                this.yellowCards.getText().toString().isEmpty()||
+                this.redCards.getText().toString().isEmpty()){
+            NotificationService.PopupMsg(this,
+                    "Must Fill All Text Fields To Continue", Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
     }
 }
 

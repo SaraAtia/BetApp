@@ -4,8 +4,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -23,10 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import static com.example.betapp.App.CHANNEL_ID;
-import static com.example.betapp.MyGroups.mUser;
+import static com.example.betapp.AuthActivity.mUser;
 
 public class NotificationService extends IntentService {
     ArrayList<Game> games;
@@ -86,46 +88,46 @@ public class NotificationService extends IntentService {
     }
 
     private void updateGames() {
-    try{
-        for (int i=0; i<this.games.size();i++) {
-            Game game = games.get(i);
-            JSONObject gameJSON = HttpService.getInstance().getJSON(
-                    Consts.GAME_DETAILS_BY_EVENT_ID + game.mGameID_API);
-            String match = gameJSON.getJSONArray("events").getJSONObject(0)
-                    .getString("strEvent");
-            Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
-                    .get("intHomeScore");
-            Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
-                    .get("intAwayScore");
-            int currHomeScore;
-            if (homeScore.toString() != "null") {
-                currHomeScore = Integer.parseInt(homeScore.toString());
-            } else {
-                currHomeScore = 0;
-            }
+        try{
+            for (int i=0; i<this.games.size();i++) {
+                Game game = games.get(i);
+                JSONObject gameJSON = HttpService.getInstance().getJSON(
+                        Consts.GAME_DETAILS_BY_EVENT_ID + game.mGameID_API);
+                String match = gameJSON.getJSONArray("events").getJSONObject(0)
+                        .getString("strEvent");
+                Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                        .get("intHomeScore");
+                Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
+                        .get("intAwayScore");
+                int currHomeScore;
+                if (homeScore.toString() != "null") {
+                    currHomeScore = Integer.parseInt(homeScore.toString());
+                } else {
+                    currHomeScore = 0;
+                }
 
 //            if (t>1){
 //                currHomeScore += 2;
 //            }
 
-            int currAwayScore;
-            if (awayScore.toString() != "null") {
-                currAwayScore = Integer.parseInt(awayScore.toString());
-            } else {
-                currAwayScore = 0;
-            }
+                int currAwayScore;
+                if (awayScore.toString() != "null") {
+                    currAwayScore = Integer.parseInt(awayScore.toString());
+                } else {
+                    currAwayScore = 0;
+                }
 
-            SoccerGame currentGame = this.gamesList.get(i);
-            if (currentGame.getHomeTeamScore() != currHomeScore || currentGame.getAwayTeamScore() != currAwayScore) {
-                this.gamesList.get(i).setHomeTeamScore(currHomeScore);
-                this.gamesList.get(i).setAwayTeamScore(currAwayScore);
-                notifyGamesResults(match, currHomeScore, currAwayScore);
+                SoccerGame currentGame = this.gamesList.get(i);
+                if (currentGame.getHomeTeamScore() != currHomeScore || currentGame.getAwayTeamScore() != currAwayScore) {
+                    this.gamesList.get(i).setHomeTeamScore(currHomeScore);
+                    this.gamesList.get(i).setAwayTeamScore(currAwayScore);
+                    notifyGamesResults(match, currHomeScore, currAwayScore);
+                }
             }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-    } catch (Exception e){
-        e.printStackTrace();
     }
-        }
 
     private void init(){
         try {
@@ -182,5 +184,11 @@ public class NotificationService extends IntentService {
             }
             this.initialized = true;
         }
+    }
+
+    public static void PopupMsg(Context context, String text, int duration){
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 }

@@ -46,29 +46,4 @@ public class HttpService {
         }
         return new JSONObject(responseStr);
     }
-    /*public void postJSON(String url, JSONObject body) {
-        try {
-            Response response = HttpService.getInstance().sendRequest("POST", url, body);
-            if (response.code() != HttpsURLConnection.HTTP_OK) {
-                System.out.println("HERE IS THE PROBLEM!");
-                response.close();
-            }
-        } catch (ExecutionException | InterruptedException e){
-            e.printStackTrace();
-            System.out.println(this.toString()+" line 59");
-        }
-    }
-    public void deleteDB(String url) {
-        try {
-            Response response = HttpService.getInstance().sendRequest("DELETE", url, null);
-            if (response.code() != HttpsURLConnection.HTTP_OK) {
-                System.out.println("HERE IS THE PROBLEM!");
-                response.close();
-            }
-        } catch (ExecutionException | InterruptedException e){
-            e.printStackTrace();
-            System.out.println(this.toString()+" line 71");
-        }
-    }*/
-
 }
