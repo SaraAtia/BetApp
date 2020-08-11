@@ -36,7 +36,7 @@ public class JoinGroup extends AppCompatActivity {
     public void enterCode(View view) {
         EditText text_code = (EditText) findViewById(R.id.code);
         String code = text_code.getText().toString(); // code = groupID
-        Error_FLAG flag = Group.addUser(code, AuthActivity.mUser.user_ID);
+        Error_FLAG flag = Group.addUser(code, AuthActivity.mUser.userID);
         if (flag == Error_FLAG.NO_ERROR){
             User user = AuthActivity.mUser;
             try {

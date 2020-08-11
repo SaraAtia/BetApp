@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.betapp.AllGamesPresentation;
 import com.example.betapp.GeneralRankingTable;
+import com.example.betapp.MyGroups;
 import com.example.betapp.R;
 
 public class GroupPresentation extends AppCompatActivity {
@@ -40,6 +41,16 @@ public class GroupPresentation extends AppCompatActivity {
     public void openAllGames(View view){
         Intent intent = new Intent(this, AllGamesPresentation.class);
         intent.putExtra("groupID", this.code);
+        startActivity(intent);
+    }
+
+    /**
+     * When clicking back button on device - return to myGroups.
+     */
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(this, MyGroups.class);
         startActivity(intent);
     }
 }

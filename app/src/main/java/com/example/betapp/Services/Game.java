@@ -7,12 +7,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 
-//TODO: remove game from database
 public class Game {
     public String mGroupID;
     public String mGameID;
@@ -71,40 +69,6 @@ public class Game {
     }
 
     /**
-     * setter.
-     * @param game_entry
-     */
-    public void setGameID(String game_entry) {
-        this.mGameID = game_entry;
-    }
-
-    /**
-     * get the game details from the API by the game id in the API.
-     * @param gameID_API
-     * @return
-     */
-    public static HashMap<String, String> getGameDetails(String gameID_API){
-        HashMap<String, String> game_details = new HashMap<>();
-        try {
-            //TODO: does game info can be null (if game is over) ?
-            JSONObject game_info =(JSONObject) HttpService.getInstance().
-                    getJSON(Consts.GAME_DETAILS_BY_EVENT_ID+gameID_API).get("events");
-            game_details.put("idEvent",game_info.getString("idEvent"));
-            game_details.put("strEvent",game_info.getString("strEvent"));
-            game_details.put("idLeague",game_info.getString("idLeague"));
-            game_details.put("strLeague",game_info.getString("strLeague"));
-            game_details.put("strHomeTeam",game_info.getString("strHomeTeam"));
-            game_details.put("strAwayTeam",game_info.getString("strAwayTeam"));
-            game_details.put("dateEvent",game_info.getString("dateEvent"));
-            game_details.put("strTimeLocal",game_info.getString("strTimeLocal"));
-            return game_details;
-        } catch (InterruptedException | ExecutionException| JSONException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * upload game to DB.
      * @param game
      * @return
@@ -133,7 +97,7 @@ public class Game {
 
         } catch (InterruptedException | ExecutionException| JSONException e){
             e.printStackTrace();
-            return null; //TODO: to handle right
+            return null;
         }
     }
 }

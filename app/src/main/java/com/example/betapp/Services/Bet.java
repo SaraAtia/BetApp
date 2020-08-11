@@ -1,5 +1,7 @@
 package com.example.betapp.Services;
 
+import android.widget.Toast;
+
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
@@ -8,7 +10,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
-//TODO: remove bet from database
 public class Bet {
     private String mBetID;
     public String mHome_team_score;
@@ -41,34 +42,26 @@ public class Bet {
      * constructor that get's json object.
      * @param betJSON
      */
-    public Bet(JSONObject betJSON){
-        try {
-            mBetID = betJSON.getString("mBetID");
-            mHome_team_score = betJSON.getString("mHome_team_score");
-            mAway_team_score = betJSON.getString("mAway_team_score");
-            mNum_of_yellow_cards = betJSON.getString("mNum_of_yellow_cards");
-            mNum_of_red_cards = betJSON.getString("mNum_of_red_cards");
-            mHome_team_players_scored = new HashMap<>();
-            mAway_team_players_scored = new HashMap<>();
-            JSONObject away_players = betJSON.getJSONObject("mAway_team_players_scored");
-            JSONObject home_players = betJSON.getJSONObject("mHome_team_players_scored");
-            for (Iterator<String> it = away_players.keys(); it.hasNext(); ) {
-                String player_id = it.next();
-                String player_name = away_players.getString(player_id);
-                mAway_team_players_scored.put(player_id, player_name);
-            }
-            for (Iterator<String> it = home_players.keys(); it.hasNext(); ) {
-                String player_id = it.next();
-                String player_name = home_players.getString(player_id);
-                mHome_team_players_scored.put(player_id, player_name);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            //todo: decide what to do
+    public Bet(JSONObject betJSON) throws JSONException{
+        mBetID = betJSON.getString("mBetID");
+        mHome_team_score = betJSON.getString("mHome_team_score");
+        mAway_team_score = betJSON.getString("mAway_team_score");
+        mNum_of_yellow_cards = betJSON.getString("mNum_of_yellow_cards");
+        mNum_of_red_cards = betJSON.getString("mNum_of_red_cards");
+        mHome_team_players_scored = new HashMap<>();
+        mAway_team_players_scored = new HashMap<>();
+        JSONObject away_players = betJSON.getJSONObject("mAway_team_players_scored");
+        JSONObject home_players = betJSON.getJSONObject("mHome_team_players_scored");
+        for (Iterator<String> it = away_players.keys(); it.hasNext(); ) {
+            String player_id = it.next();
+            String player_name = away_players.getString(player_id);
+            mAway_team_players_scored.put(player_id, player_name);
         }
-
-
+        for (Iterator<String> it = home_players.keys(); it.hasNext(); ) {
+            String player_id = it.next();
+            String player_name = home_players.getString(player_id);
+            mHome_team_players_scored.put(player_id, player_name);
+        }
     }
 
     /**

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.betapp.Services.Game;
 import com.example.betapp.Services.HttpService.HttpService;
@@ -43,7 +44,7 @@ public class GamePresentation extends AppCompatActivity {
                 java.sql.Date date=new java.sql.Date(millis);
                 Date game_date = new SimpleDateFormat("yyyy-MM-dd").parse(curr_game.mDate);
                 Date curr_date = new SimpleDateFormat("yyyy-MM-dd").parse(date.toString());
-                if(curr_date.equals(game_date)){ //TODO: prevent bet a day before game happens
+                if(curr_date.equals(game_date)){
                     curr_game.mAvailable_to_bet = false;
                 }
                 final Context context = this;
@@ -61,7 +62,10 @@ public class GamePresentation extends AppCompatActivity {
                     });
                     mLayout.addView(gamble_btn);
                 } else {
-                    //todo:check is finish
+                    //todo:find more accurate check 'after'
+                    if(curr_date.after(game_date)){
+                        curr_game.mAvailable_to_bet = false;
+                    }
                     showEventResult(curr_game.mGameID_API);
                     Button ranking_btn = new Button(this);
                     ranking_btn.setText(R.string.ranking_table);
@@ -76,7 +80,12 @@ public class GamePresentation extends AppCompatActivity {
                     mLayout.addView(ranking_btn);
                 }
             } catch (ParseException e) {
-                e.printStackTrace(); //TODO: logic catch
+                e.printStackTrace();
+                Toast.makeText(this, "Error Occurred - Can't Present Game Now",
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, AllGamesPresentation.class);
+                intent.putExtra("groupID", curr_game.mGroupID);
+                startActivity(intent);
             }
         }
     }
@@ -89,7 +98,7 @@ public class GamePresentation extends AppCompatActivity {
     private void showEventResult(String game_id_api){
         try {
             JSONObject event_details = HttpService.getInstance().
-                    getJSON(Consts.EVENT_DETAILS+ game_id_api);//TODO: live score url
+                    getJSON(Consts.EVENT_DETAILS+ game_id_api);
             String home_score = event_details.getString("intHomeScore");
             String away_score = event_details.getString("intAwayScore");
             String away_red_card = event_details.getString("strAwayRedCards");

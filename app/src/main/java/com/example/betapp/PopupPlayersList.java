@@ -59,7 +59,6 @@ public class PopupPlayersList extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        // TODO: get players names - create checkbox for each.
         getWindow().setLayout((int)(width*.8),(int)(height*.75));
     }
 

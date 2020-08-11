@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.betapp.Services.Bet;
 import com.example.betapp.Services.HttpService.HttpService;
@@ -21,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
+
+import okhttp3.internal.ws.RealWebSocket;
+
+import static java.lang.System.exit;
 
 public class RankingTable extends AppCompatActivity {
     private TableLayout mRanking_table;
@@ -53,14 +58,25 @@ public class RankingTable extends AppCompatActivity {
                 String userID = user_rank.keys().next();
                 String user_name = users_info.getJSONObject(userID).getString("user_name");
                 String betID = game_info.getJSONObject("mUsers_bets").getString(userID);
-                Bet bet = new Bet(bets_info.getJSONObject(betID));
+                Bet bet = null;
+                try{
+                    bet = new Bet(bets_info.getJSONObject(betID));
+                } catch(JSONException e){
+                    e.printStackTrace();
+                    Toast.makeText(this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+                    exit(0);
+                }
                 String game_score = bet.mHome_team_score + "-" + bet.mAway_team_score;
                 Collection<String> players_scored_collection = new ArrayList<>(bet.mHome_team_players_scored.values());
                 Collection<String> away_players_scored_collection = bet.mAway_team_players_scored.values();
                 players_scored_collection.addAll(away_players_scored_collection);
                 StringBuilder players_scored = new StringBuilder();
+                String separator = ",";
                 for (Iterator player = players_scored_collection.iterator(); player.hasNext(); ) {
-                    players_scored.append(player.next()).append(","); //Todo: delete last ,
+                    if(!player.hasNext()){
+                        separator = "";
+                    }
+                    players_scored.append(player.next()).append(separator);
                 }
                 createRow(String.valueOf(i), user_name, game_score, players_scored.toString(),
                         bet.mNum_of_yellow_cards, bet.mNum_of_red_cards);
@@ -68,7 +84,6 @@ public class RankingTable extends AppCompatActivity {
         } catch (JSONException|ExecutionException|InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     /**

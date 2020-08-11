@@ -33,10 +33,10 @@ public class Gamble extends AppCompatActivity {
     EditText homeScore, awayScore, yellowCards, redCards;
     String away_teamID, home_teamID;
     public static HashMap<String, ArrayList<CheckBox>> players_view_by_teamID;
-    public static final HashMap<String, HashMap<Integer, Boolean>> teamPlayersChecked = new HashMap<>(2);//teamID:checked players(int=position, boolean=isChecked)
-//    ArrayList<String> who_scored = new ArrayList<>();
+    public static final HashMap<String, HashMap<Integer, Boolean>> teamPlayersChecked =
+            new HashMap<>(2);//teamID:checked players(int=position, boolean=isChecked)
     String gameID;
-//Todo: not allow submit a bet with an empty field
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -81,7 +81,7 @@ public class Gamble extends AppCompatActivity {
      */
     private HashMap<String, String> getSelectedPlayers(String teamID){
         HashMap<String, String> players_selected = new HashMap<>();
-        HashMap<Integer, Boolean> players_by_teamID= teamPlayersChecked.get(teamID);//todo: if null
+        HashMap<Integer, Boolean> players_by_teamID= teamPlayersChecked.get(teamID);
         ArrayList<CheckBox> players_info_by_teamID = players_view_by_teamID.get(teamID);
         if (players_by_teamID == null){
             teamPlayersChecked.remove(teamID);
@@ -106,7 +106,7 @@ public class Gamble extends AppCompatActivity {
                 getSelectedPlayers(this.home_teamID), getSelectedPlayers(this.away_teamID));
         Bet.uploadToDB(bet);
         String betID = bet.getmBetID();
-        String userID = AuthActivity.mUser.user_ID;
+        String userID = AuthActivity.mUser.userID;
         FirebaseDatabase DB = FirebaseDatabase.getInstance();
         DatabaseReference curr_game_ref = DB.getReference("games").child(gameID);
         DatabaseReference user_bets = curr_game_ref.child("mUsers_bets");

@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.betapp.Consts.GROUPS_DATABASE;
-//TODO: remove group from database
 
 public class Group {
     public String groupID;
@@ -170,7 +169,7 @@ public class Group {
      * setter (on DB).
      * @param games
      */
-    public void setGroupGames(HashMap<String, String> games) { //todo:
+    public void setGroupGames(HashMap<String, String> games) {
         this.games = games;
         // update name on DB
         FirebaseDatabase DB = FirebaseDatabase.getInstance();

@@ -145,11 +145,17 @@ public class GamesAdapter extends BaseAdapter{
      */
     public void OnClickSubmit(View view){
         mGames_selected.put(league_id, checked_map.values().toArray(new Boolean[15]));
+        int counter = 0;
         HashMap<String, String> games_selected = new HashMap<>(); //string = group ID
         String groupID = this.m_group.getGroupID();
         // go over all league which games where selected from and add them to map games_selected
         for(String leagueId: this.mGames_selected.keySet()){
             try {
+                if(mGames_selected.get(leagueId)[0] == null){
+                    continue;
+                }
+                ++counter;
+
                 // pull next 15 games of league selected
                 JSONArray league_gamesJSON = (JSONArray) HttpService.getInstance().
                         getJSON(Consts.NEXT15EVENTS_BY_LEAGUEID + leagueId).get("events");
@@ -172,6 +178,10 @@ public class GamesAdapter extends BaseAdapter{
             } catch (InterruptedException | ExecutionException| JSONException e) {
                 e.printStackTrace();
             }
+        }
+        if(counter == 0){
+            Toast.makeText(m_context, "You Must Choose at Least One Game", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         this.m_group.setGroupGames(games_selected);

@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * My Groups activity allow to create a group or join to exist group by a code.
@@ -42,21 +43,34 @@ public class MyGroups extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // user ID as saved in authentication info
         final String userIDAuth = getIntent().getStringExtra("userIDAuth");
+        final String userName = "Dekel"; //getIntent().getStringExtra("userName");//todo
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final Context context = this;
         if(userIDAuth!=null){
-// get the map between user id in authentication to user entry in user's database
-            DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
+            // get the map between user id in authentication to user entry in user's database
+            final DatabaseReference user_map_DB = database.getReference("FBUidToDBUid");
             user_map_DB.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        mUserID = ds.child(userIDAuth).getValue(String.class); //TODO: if null - create a new user on db
+                    if(!dataSnapshot.child(userIDAuth).exists()){
+                        mUser = User.createUser(userName);
+                        user_map_DB.child(userIDAuth).setValue(mUser.userID);
                         // get the map between user id in authentication to user entry in user's database
-                        DatabaseReference users_DB = database.getReference("users");
+                        AuthActivity.mUser = mUser;
+                    }
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        final String mUserID;
+                        if (!ds.getKey().equals(userIDAuth)) { //other child's - irrelevant
+                            continue;
+                        }
+                        mUserID = ds.getValue(String.class);
+                        final DatabaseReference users_DB = database.getReference("users");
                         users_DB.addValueEventListener(new ValueEventListener(){
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (mUserID == null) { //other child's - irrelevant
+                                    return;
+                                }
                                 mUser = dataSnapshot.child(mUserID).getValue(User.class);
                                 AuthActivity.mUser = mUser;
                                 HashMap<String, String> groups = mUser.getUserGroups();
@@ -92,7 +106,6 @@ public class MyGroups extends AppCompatActivity {
                 }
             });
         } else {
-
             DatabaseReference users_DB = database.getReference("users");
             users_DB.addValueEventListener(new ValueEventListener(){
                 @Override

@@ -39,7 +39,6 @@ public class AuthActivity extends AppCompatActivity {
         if (currentUser != null){
             openMyGroupsActivity(currentUser.getUid());
         }
-
     }
 
     @Override
@@ -88,12 +87,6 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void signIn(String email, String password){
-        /////////////////////// TODO: delete from here //////////////////////////
-        /*if(email.isEmpty()){
-            email = "sara@betapp.com";
-            password = "123456";
-        }*/
-        /////********************* Till here *************************//////////////////
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

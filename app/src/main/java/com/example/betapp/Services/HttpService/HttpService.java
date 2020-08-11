@@ -46,7 +46,7 @@ public class HttpService {
         }
         return new JSONObject(responseStr);
     }
-    public void postJSON(String url, JSONObject body) {
+    /*public void postJSON(String url, JSONObject body) {
         try {
             Response response = HttpService.getInstance().sendRequest("POST", url, body);
             if (response.code() != HttpsURLConnection.HTTP_OK) {
@@ -54,7 +54,7 @@ public class HttpService {
                 response.close();
             }
         } catch (ExecutionException | InterruptedException e){
-            e.printStackTrace();//todo: handle
+            e.printStackTrace();
             System.out.println(this.toString()+" line 59");
         }
     }
@@ -66,10 +66,9 @@ public class HttpService {
                 response.close();
             }
         } catch (ExecutionException | InterruptedException e){
-            e.printStackTrace();//todo: handle
+            e.printStackTrace();
             System.out.println(this.toString()+" line 71");
         }
-
-    }
+    }*/
 
 }

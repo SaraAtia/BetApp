@@ -32,8 +32,8 @@ public class NameGroup extends AppCompatActivity {
         Group group = CreateGroup.getGroup();
         group.setGroupStatus(true);
         group.updateGroupName(group_name);
-        group.addUser(MyGroups.mUser.getUserID());
-        MyGroups.mUser.addGroup(group.getGroupName(), group.getGroupID());
+        group.addUser(AuthActivity.mUser.getUserID());
+        AuthActivity.mUser.addGroup(group.getGroupName(), group.getGroupID());
         Intent intent = new Intent(this, GroupPresentation.class);
         intent.putExtra("group_name", group_name);
         intent.putExtra("groupID", group.getGroupID());

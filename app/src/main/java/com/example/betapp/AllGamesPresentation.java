@@ -36,8 +36,6 @@ public class AllGamesPresentation extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Group curr_group = dataSnapshot.child(groupID).getValue(Group.class);
-                //todo: if null
-                if (curr_group==null){return;}
                 HashMap<String, String> games = curr_group.games; // id:name
                 if (games != null) {
                     Object[] games_ids = games.keySet().toArray();
