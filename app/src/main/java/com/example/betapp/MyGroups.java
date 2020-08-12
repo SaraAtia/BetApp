@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,7 +47,6 @@ public class MyGroups extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // user ID as saved in authentication info
         final String userIDAuth = getIntent().getStringExtra("userIDAuth");
-        final String userName = getIntent().getStringExtra("user_name");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final Context context = this;
         if(IsFirstUsage(userIDAuth)){
@@ -100,36 +98,6 @@ public class MyGroups extends AppCompatActivity {
         } else {
             //user has returned to his groups' screen
             UploadUserGroups(AuthActivity.mUser.getUserGroups(), context, layout);
-           /* DatabaseReference users_DB = database.getReference("users");
-            users_DB.addValueEventListener(new ValueEventListener(){
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    AuthActivity.mUser = dataSnapshot.child(AuthActivity.mUser.getUserID()).getValue(User.class);
-                    HashMap<String, String> groups = AuthActivity.mUser.getUserGroups();
-                    if (groups != null) {
-                        Object[] groups_names = groups.keySet().toArray();
-                        Object[] groups_ids = groups.values().toArray();
-                        for (int i = 0; i < groups.size(); i++) {
-                            Button btnShow = new Button(context);
-                            btnShow.setText((String) groups_names[i]);
-                            btnShow.setLayoutParams(new LinearLayout.LayoutParams
-                                    (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.
-                                            LayoutParams.WRAP_CONTENT));
-                            btnShow.setTag((String) groups_ids[i]);
-                            btnShow.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    openGroup(v.getTag().toString());
-                                }
-                            });
-                            layout.addView(btnShow);
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });*/
         }
 
         this.startService(); // TODO: uncomment to start notification service

@@ -15,11 +15,9 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.betapp.AuthActivity;
 import com.example.betapp.Consts;
-import com.example.betapp.MyGroups;
 import com.example.betapp.R;
 import com.example.betapp.Services.HttpService.HttpService;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

@@ -21,7 +21,6 @@ public class Group {
     public ArrayList<String> users; // string = userID
     public boolean status; // is the group active
     public HashMap<String, String> games; // gameID: name
-    private HashMap<String, ArrayList<String>> games_by_date;//Date:gamesID
     private HashMap<String, Integer> users_rank;//userID:rank
 
     /**
@@ -31,7 +30,6 @@ public class Group {
     public Group(String id){
         this.groupName = "";
         this.groupID = id;
-        this.games_by_date = new HashMap<>();
         this.games = new HashMap<>();
         this.status = false;
         this.users_rank = new HashMap<>();
