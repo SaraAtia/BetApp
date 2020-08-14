@@ -5,31 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    tools:context=".NameGroup">
+    tools:context=".NameGroup"
+    android:background="@drawable/soccer_background_1">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="252dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter group's name:">
-        </TextView>
+            android:text="Enter group's name:"
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="253dp"></TextView>
+
         <EditText
             android:id="@+id/group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="enter group's name"
-            >
-        </EditText>
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="272dp"></EditText>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="nameGroup"
             android:text="OK"
-            android:onClick="nameGroup">
-        </Button>
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="317dp"></Button>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
