@@ -15,6 +15,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.betapp.AuthActivity;
 import com.example.betapp.Consts;
+import com.example.betapp.GamePresentation;
+import com.example.betapp.MyGroups;
 import com.example.betapp.R;
 import com.example.betapp.Services.HttpService.HttpService;
 
@@ -37,7 +39,7 @@ public class NotificationService extends IntentService {
     int id;
     public HashMap<String, String> groups;
     boolean initialized;
-    public static int t = -1;
+    public static int t = 0;
 
     public NotificationService() {
         super("NotificationService");
@@ -54,7 +56,7 @@ public class NotificationService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         int time = 600000;
-        int debugTime = 5000;
+        int debugTime = 3000;
         while (true) {
             try {
                 Thread.sleep(debugTime);
@@ -70,8 +72,9 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void notifyGamesResults(String match, int home, int away) {
-        Intent notificationIntent = new Intent(this, AuthActivity.class);
+    private void notifyGamesResults(String match, int home, int away, String idEvent) {
+        Intent notificationIntent = new Intent(this, MyGroups.class);
+        notificationIntent.putExtra("gameID",idEvent);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(match)
@@ -102,6 +105,22 @@ public class NotificationService extends IntentService {
                         .get("intHomeScore");
                 Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
                         .get("intAwayScore");
+                Object idEvent = gameJSON.getJSONArray("events").getJSONObject(0)
+                        .get("idEvent");
+                JSONObject games = HttpService.getInstance().getJSON(
+                        Consts.GAMES_DATABASE);
+                Iterator<String> it = games.keys();
+                String key = it.next();
+                String gameID = "";
+                while (key != null) {
+                    String gameIDAPI = games.getJSONObject(key).getString("mGameID_API");
+                    String eventID = idEvent.toString();
+                    if(gameIDAPI.equalsIgnoreCase(eventID)){
+                        gameID = key;
+                        break;
+                    }
+                    key = it.next();
+                }
                 int currHomeScore;
                 if (homeScore.toString() != "null") {
                     currHomeScore = Integer.parseInt(homeScore.toString());
@@ -121,7 +140,7 @@ public class NotificationService extends IntentService {
                 if (currentGame.getHomeTeamScore() != currHomeScore || currentGame.getAwayTeamScore() != currAwayScore) {
                     this.gamesList.get(i).setHomeTeamScore(currHomeScore);
                     this.gamesList.get(i).setAwayTeamScore(currAwayScore);
-                    notifyGamesResults(match, currHomeScore, currAwayScore);
+                    notifyGamesResults(match, currHomeScore, currAwayScore, gameID);
                 }
             }
         } catch (Exception e) {
