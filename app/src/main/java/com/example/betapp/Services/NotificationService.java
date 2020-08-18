@@ -20,10 +20,13 @@ import com.example.betapp.Services.HttpService.HttpService;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 
 import static com.example.betapp.App.CHANNEL_ID;
 import static com.example.betapp.AuthActivity.mUser;
@@ -34,33 +37,31 @@ public class NotificationService extends IntentService {
     int id;
     public HashMap<String, String> groups;
     boolean initialized;
-    public static int t = 0;
+    public static int t = -1;
 
-    public NotificationService()
-    {
-        super( "NotificationService" );
+    public NotificationService() {
+        super("NotificationService");
         this.games = new ArrayList<>();
         this.gamesList = new ArrayList<>();
         this.id = 1;
         this.initialized = false;
     }
 
-    public NotificationService(String name)
-    {
-        super( "NotificationService" );
+    public NotificationService(String name) {
+        super("NotificationService");
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         int time = 600000;
-        int debugTime = 3000;
-        while(true){
+        int debugTime = 5000;
+        while (true) {
             try {
-                Thread.sleep(time);
+                Thread.sleep(debugTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (!this.initialized){
+            if (!this.initialized) {
                 init();
             } else {
                 updateGames();
@@ -69,9 +70,9 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void notifyGamesResults(String match, int home, int away){
+    private void notifyGamesResults(String match, int home, int away) {
         Intent notificationIntent = new Intent(this, AuthActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(match)
                 .setContentText(home + " - " + away)
@@ -79,18 +80,22 @@ public class NotificationService extends IntentService {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.notify(id++,notification);
+            manager.notify(id, notification);
         }
     }
 
     private void updateGames() {
-        try{
-            for (int i=0; i<this.games.size();i++) {
+        try {
+            for (int i = 0; i < this.games.size(); i++) {
                 Game game = games.get(i);
                 JSONObject gameJSON = HttpService.getInstance().getJSON(
                         Consts.GAME_DETAILS_BY_EVENT_ID + game.mGameID_API);
+                if (t>=Consts.test.length){
+                    return;
+                }
+                gameJSON = new JSONObject(Consts.test[t]);
                 String match = gameJSON.getJSONArray("events").getJSONObject(0)
                         .getString("strEvent");
                 Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
@@ -104,9 +109,6 @@ public class NotificationService extends IntentService {
                     currHomeScore = 0;
                 }
 
-//            if (t>1){
-//                currHomeScore += 2;
-//            }
 
                 int currAwayScore;
                 if (awayScore.toString() != "null") {
@@ -122,36 +124,36 @@ public class NotificationService extends IntentService {
                     notifyGamesResults(match, currHomeScore, currAwayScore);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void init(){
+    private void init() {
         try {
             groups = mUser.getUserGroups();
-        } catch (Exception e){
+        } catch (Exception e) {
             return;
         }
-        if (groups.isEmpty()){
+        if (groups.isEmpty()) {
             return;
         } else {
             Iterator iterator = groups.entrySet().iterator();
-            while(iterator.hasNext()){
-                Map.Entry mapElement = (Map.Entry)iterator.next();
+            while (iterator.hasNext()) {
+                Map.Entry mapElement = (Map.Entry) iterator.next();
                 String groupId = mapElement.getValue().toString();
                 try {
                     JSONObject group = HttpService.getInstance().getJSON(
-                            "https://betapp-7ea26.firebaseio.com/groups/"+
-                                    groupId +".json");
+                            "https://betapp-7ea26.firebaseio.com/groups/" +
+                                    groupId + ".json");
                     JSONObject games = group.getJSONObject("games");
                     Iterator<String> keys = games.keys();
-                    while(keys.hasNext()) {
+                    while (keys.hasNext()) {
                         String key = keys.next();
                         Game game = Game.getGame(key);
                         this.games.add(game);
                         JSONObject gameJSON = HttpService.getInstance().getJSON(
-                                Consts.GAME_DETAILS_BY_EVENT_ID+game.mGameID_API);
+                                Consts.GAME_DETAILS_BY_EVENT_ID + game.mGameID_API);
                         String match = gameJSON.getJSONArray("events").getJSONObject(0)
                                 .getString("strEvent");
                         Object homeScore = gameJSON.getJSONArray("events").getJSONObject(0)
@@ -159,24 +161,24 @@ public class NotificationService extends IntentService {
                         Object awayScore = gameJSON.getJSONArray("events").getJSONObject(0)
                                 .get("intAwayScore");
                         int currHomeScore;
-                        if(homeScore.toString() != "null"){
+                        if (homeScore.toString() != "null") {
                             currHomeScore = Integer.parseInt(homeScore.toString());
 
                         } else {
                             currHomeScore = 0;
                         }
                         int currAwayScore;
-                        if(awayScore.toString() != "null"){
+                        if (awayScore.toString() != "null") {
                             currAwayScore = Integer.parseInt(awayScore.toString());
                         } else {
                             currAwayScore = 0;
                         }
                         SoccerGame game1 = new SoccerGame(
-                                match,currHomeScore,currAwayScore,null,
-                                0,0,false);
+                                match, currHomeScore, currAwayScore, null,
+                                0, 0, false);
                         this.gamesList.add(game1);
                     }
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -184,9 +186,11 @@ public class NotificationService extends IntentService {
         }
     }
 
-    public static void PopupMsg(Context context, String text, int duration){
+    public static void PopupMsg(Context context, String text, int duration) {
         Toast toast = Toast.makeText(context, text, duration);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+
 }
